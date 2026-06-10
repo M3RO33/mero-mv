@@ -119,6 +119,18 @@ nav{display:flex;align-items:center;gap:8px}
 }
 .lang-toggle[data-lang="ja"] .lang-pill{transform:translateX(100%)}
 
+/* share button */
+.share-btn{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  border:3px solid var(--green-900);background:#fff;color:var(--green-700);
+  cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 4px 0 rgba(63,114,18,.2);
+  transition:transform .15s ease,box-shadow .15s ease,background .2s;
+}
+.share-btn:hover{background:var(--green-100);transform:translateY(-2px)}
+.share-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(63,114,18,.2)}
+.share-btn svg{width:18px;height:18px}
+
 /* ---------- hero ---------- */
 .hero{position:relative;z-index:1;text-align:center;padding:72px 20px 56px}
 .hero-logo{max-width:min(460px,80vw);height:auto;display:block;margin:0 auto;
@@ -373,6 +385,12 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
     <nav>
       <a class="nav-link" href="#works" data-i18n="nav_works">작업물</a>
       <a class="nav-link" href="#contact" data-i18n="nav_contact">연락처</a>
+      <button class="share-btn" id="shareBtn" type="button" aria-label="share" title="share">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/>
+          <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>
+        </svg>
+      </button>
       <div class="lang-toggle" id="langToggle" data-lang="ko" role="group" aria-label="language">
         <div class="lang-pill"></div>
         <button id="btnKo" class="active" type="button">KR</button>
@@ -500,6 +518,7 @@ const I18N = {
     toast_dup:'이미 추가된 영상이에요!',
     toast_titlefail:'제목을 가져오지 못해 링크로 대신 표시했어요',
     toast_copied:'복사되었어요! ✦',
+    toast_link:'사이트 링크를 복사했어요! 🔗',
     toast_deleted:'영상을 삭제했어요',
     confirm_delete:'이 영상을 삭제할까요?',
     chip_watch:'YouTube ↗', chip_delete:'삭제',
@@ -524,6 +543,7 @@ const I18N = {
     toast_dup:'すでに追加された動画です！',
     toast_titlefail:'タイトルを取得できなかったため、リンクを表示します',
     toast_copied:'コピーしました！✦',
+    toast_link:'サイトリンクをコピーしました！🔗',
     toast_deleted:'動画を削除しました',
     confirm_delete:'この動画を削除しますか？',
     chip_watch:'YouTube ↗', chip_delete:'削除',
@@ -753,6 +773,13 @@ async function copyText(text) {
     ta.select(); document.execCommand('copy'); ta.remove();
   }
 }
+
+/* ============ share button ============ */
+const SITE_URL = 'https://m3ro33.github.io/mero-mv/';
+document.getElementById('shareBtn').addEventListener('click', async () => {
+  await copyText(SITE_URL);
+  toast(t('toast_link'));
+});
 
 /* ============ contact copy ============ */
 document.querySelectorAll('.contact-card').forEach(card => {
