@@ -204,6 +204,9 @@ body:not(.admin) .admin-only{display:none !important}
 }
 .card.shown{opacity:1;transform:translateY(0)}
 .card:hover{transform:translateY(-7px) rotate(-.6deg);border-color:var(--green-500);box-shadow:0 13px 0 rgba(63,114,18,.16)}
+body.admin .card{cursor:grab}
+body.admin .card:active{cursor:grabbing}
+.card.dragging{opacity:.45;transform:rotate(2.5deg) scale(.96);border-style:dashed;border-color:var(--green-500);box-shadow:none}
 .thumb{
   position:relative;aspect-ratio:16/9;cursor:pointer;overflow:hidden;
   background:var(--green-100);display:block;width:100%;border:0;padding:0;
@@ -482,10 +485,11 @@ const I18N = {
     nav_works:'작업물', nav_contact:'연락처',
     hero_hello:'안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦',
     hero_tagline:'이야기가 담긴 영상을 만들어요! 🍈',
-    works_sub:'유튜브 링크를 붙여넣으면 제목을 자동으로 가져와요!',
+    works_sub:'링크를 붙여넣으면 제목을 자동으로 가져와요! 카드를 드래그하면 순서도 바꿀 수 있어요',
     add_placeholder:'유튜브 링크를 붙여넣어 주세요!',
     add_btn:'＋ 추가', add_loading:'가져오는 중...',
     export_btn:'목록 내보내기',
+    toast_order:'순서를 저장했어요! ✦',
     toast_exported:'영상 목록(JSON)을 복사했어요! ✦',
     toast_admin_on:'편집 모드 ON! 영상을 추가할 수 있어요 🍈',
     toast_admin_off:'편집 모드 OFF',
@@ -505,10 +509,11 @@ const I18N = {
     nav_works:'作品', nav_contact:'連絡先',
     hero_hello:'こんにちは！サブカルMVエディターのMEROです ✦',
     hero_tagline:'物語が詰まった映像を作ります！🍈',
-    works_sub:'YouTubeリンクを貼ると、タイトルを自動で取得します！',
+    works_sub:'リンクを貼るとタイトルを自動で取得します！カードをドラッグして並べ替えもできます',
     add_placeholder:'YouTubeリンクを貼り付けてください！',
     add_btn:'＋ 追加', add_loading:'取得中...',
     export_btn:'リストを書き出す',
+    toast_order:'順番を保存しました！✦',
     toast_exported:'動画リスト(JSON)をコピーしました！✦',
     toast_admin_on:'編集モードON！動画を追加できます 🍈',
     toast_admin_off:'編集モードOFF',
@@ -607,6 +612,10 @@ async function fetchTitle(id) {
 }
 
 /* ============ render ============ */
+let dragMoved = false;
+document.getElementById('videoGrid').addEventListener('dragover', e => {
+  if (editMode) e.preventDefault();
+});
 function renderVideos() {
   const grid = document.getElementById('videoGrid');
   grid.innerHTML = '';
@@ -617,14 +626,14 @@ function renderVideos() {
     card.className = 'card';
     card.innerHTML = `
       <button class="thumb" type="button" aria-label="play">
-        <img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg"
+        <img loading="lazy" draggable="false" src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg"
              onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" alt="">
         <span class="play-bubble"><span>▶</span></span>
       </button>
       <div class="card-body">
         <p class="card-title"></p>
         <div class="card-actions">
-          <a class="chip" target="_blank" rel="noopener"
+          <a class="chip" target="_blank" rel="noopener" draggable="false"
              href="https://www.youtube.com/watch?v=${v.id}">${t('chip_watch')}</a>
           <button class="chip danger admin-only" type="button">${t('chip_delete')}</button>
         </div>
@@ -651,6 +660,35 @@ function renderVideos() {
     });
     thumbEl.addEventListener('mouseleave', stopPreview);
     thumbEl.addEventListener('click', () => { stopPreview(); openPlayer(v); });
+
+    /* drag reorder (편집 모드 전용) */
+    card.dataset.id = v.id;
+    card.draggable = true;
+    card.addEventListener('dragstart', e => {
+      if (!editMode) { e.preventDefault(); return; }
+      stopPreview();
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', v.id);
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      if (dragMoved) {
+        dragMoved = false;
+        saveVideos();
+        toast(t('toast_order'));
+      }
+    });
+    card.addEventListener('dragenter', () => {
+      const draggingEl = grid.querySelector('.dragging');
+      if (!editMode || !draggingEl || draggingEl === card) return;
+      const from = videos.findIndex(x => x.id === draggingEl.dataset.id);
+      const to = videos.findIndex(x => x.id === v.id);
+      if (from < 0 || to < 0) return;
+      videos.splice(to, 0, videos.splice(from, 1)[0]);
+      if (from < to) card.after(draggingEl); else card.before(draggingEl);
+      dragMoved = true;
+    });
     card.querySelector('.chip.danger').addEventListener('click', () => {
       if (!confirm(t('confirm_delete'))) return;
       videos = videos.filter(x => x.id !== v.id);
