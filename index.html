@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERO — MV Portfolio</title>
+<meta name="description" content="이야기가 담긴 영상을 만들어요! MV 편집자 MERO의 포트폴리오">
+<meta name="theme-color" content="#8fd14f">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="logo.png">
+<!-- 공유 카드 (배포 후 og:image / og:url 은 전체 주소로 바꿔주세요. 예: https://mero.pages.dev/logo.png) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MERO">
+<meta property="og:title" content="MERO — MV Portfolio">
+<meta property="og:description" content="이야기가 담긴 영상을 만들어요! 🍈 MV EDIT / MOTION">
+<meta property="og:image" content="logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MERO — MV Portfolio">
+<meta name="twitter:description" content="이야기가 담긴 영상을 만들어요! 🍈 MV EDIT / MOTION">
+<meta name="twitter:image" content="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Jua&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-900:#3f7212;
+  --green-700:#5a9622;
+  --green-500:#8fd14f;
+  --green-300:#bce98a;
+  --green-100:#e6f7cf;
+  --green-50:#f7fdee;
+  --cherry:#d63d3d;
+  --cherry-dark:#a82828;
+  --cream:#fffdf6;
+  --ink:#3a4a2a;
+  --shadow:0 6px 0 rgba(63,114,18,.18);
+  --radius:26px;
+  --font-kr:'Jua',sans-serif;
+  --font-jp:'Mochiy Pop One',sans-serif;
+  --font-latin:'Baloo 2',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-latin),var(--font-kr);
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+  min-height:100vh;
+  background-image:radial-gradient(rgba(143,209,79,.14) 2.5px, transparent 2.5px);
+  background-size:34px 34px;
+}
+html[lang="ja"] body{font-family:var(--font-latin),var(--font-jp)}
+html[lang="ja"] [data-i18n],html[lang="ja"] input::placeholder{font-family:var(--font-jp)}
+html[lang="ko"] [data-i18n],html[lang="ko"] input::placeholder{font-family:var(--font-kr)}
+
+/* ---------- floating bg deco ---------- */
+.bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-deco span{
+  position:absolute;color:var(--green-300);opacity:.55;
+  animation:floaty 7s ease-in-out infinite;
+  user-select:none;
+}
+@keyframes floaty{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-22px) rotate(12deg)}
+}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,253,246,.85);
+  backdrop-filter:blur(10px);
+  border-bottom:3px solid var(--green-100);
+}
+.header-inner{
+  max-width:1080px;margin:0 auto;padding:12px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.brand-logo{height:46px;width:auto;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.brand:hover .brand-logo{transform:scale(1.08) rotate(-2deg)}
+.brand-fallback{display:none;align-items:center;gap:10px}
+.brand:hover .brand-mascot{transform:rotate(-12deg) scale(1.12)}
+.brand-mascot{width:42px;height:42px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.brand-name{
+  font-family:var(--font-latin);font-weight:800;font-size:1.7rem;letter-spacing:.04em;
+  color:var(--green-700);
+}
+nav{display:flex;align-items:center;gap:8px}
+.nav-link{
+  font-size:1.02rem;text-decoration:none;color:var(--green-700);
+  padding:8px 16px;border-radius:999px;border:2.5px solid transparent;
+  transition:all .22s ease;
+}
+.nav-link:hover{background:var(--green-100);border-color:var(--green-300);transform:translateY(-2px)}
+
+/* language toggle */
+.lang-toggle{
+  position:relative;display:flex;border:3px solid var(--green-900);
+  border-radius:999px;background:#fff;overflow:hidden;cursor:pointer;
+  box-shadow:0 4px 0 rgba(63,114,18,.2);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.lang-toggle:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(63,114,18,.2)}
+.lang-toggle button{
+  position:relative;z-index:2;border:0;background:transparent;cursor:pointer;
+  font-family:var(--font-latin);font-weight:800;font-size:.92rem;
+  padding:7px 15px;color:var(--green-700);transition:color .25s ease;
+}
+.lang-toggle button.active{color:#fff}
+.lang-pill{
+  position:absolute;top:0;bottom:0;width:50%;border-radius:999px;
+  background:linear-gradient(180deg,var(--green-500),var(--green-700));
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:1;
+}
+.lang-toggle[data-lang="ja"] .lang-pill{transform:translateX(100%)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;z-index:1;text-align:center;padding:72px 20px 56px}
+.hero-logo{max-width:min(460px,80vw);height:auto;display:block;margin:0 auto;
+  filter:drop-shadow(0 10px 0 rgba(63,114,18,.12));
+  animation:bob 4s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-logo-text{
+  display:none;font-family:var(--font-latin);font-weight:800;
+  font-size:clamp(4rem,12vw,7.5rem);letter-spacing:.02em;line-height:1;
+  color:var(--green-700);
+  text-shadow:0 8px 0 rgba(63,114,18,.12);
+  animation:bob 4s ease-in-out infinite;
+}
+.hero-hello{
+  display:inline-block;margin-top:26px;font-size:1.15rem;color:var(--green-700);
+  background:#fff;border:3px solid var(--green-300);border-radius:999px;
+  padding:9px 24px;box-shadow:var(--shadow);
+}
+.hero-tagline{margin-top:16px;font-size:1.28rem;color:var(--ink)}
+.hero-badges{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.badge{
+  font-family:var(--font-latin);font-weight:700;font-size:.86rem;letter-spacing:.06em;
+  background:var(--green-100);color:var(--green-900);
+  border:2.5px solid var(--green-500);border-radius:999px;padding:6px 16px;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),background .2s;
+  cursor:default;
+}
+.badge:hover{transform:scale(1.12) rotate(-3deg);background:var(--green-300)}
+
+/* ---------- sections ---------- */
+section{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:44px 22px}
+.section-title{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin-bottom:8px;
+}
+.section-title h2{
+  font-family:var(--font-latin);font-weight:800;font-size:2.2rem;letter-spacing:.08em;
+  color:var(--green-700);
+  text-shadow:0 4px 0 rgba(63,114,18,.12);
+}
+.section-title .star{color:var(--green-500);font-size:1.5rem;animation:twinkle 1.8s ease-in-out infinite}
+.section-title .star:last-child{animation-delay:.9s}
+@keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.45}}
+.section-sub{text-align:center;color:var(--green-700);margin-bottom:30px;font-size:1.05rem}
+
+/* ---------- add video form (edit mode only) ---------- */
+body:not(.admin) .admin-only{display:none !important}
+.add-bar{
+  display:flex;gap:10px;max-width:640px;margin:0 auto 36px;
+}
+.export-row{text-align:center;margin:-24px 0 32px}
+.export-row .chip{display:inline-block;flex:none;padding:8px 24px}
+.add-bar input{
+  flex:1;min-width:0;font-size:1rem;font-family:inherit;color:var(--ink);
+  background:#fff;border:3px solid var(--green-300);border-radius:999px;
+  padding:13px 22px;outline:none;
+  transition:border-color .2s,box-shadow .2s,transform .2s;
+  box-shadow:0 4px 0 rgba(63,114,18,.1);
+}
+.add-bar input:focus{border-color:var(--green-500);box-shadow:0 4px 0 rgba(63,114,18,.22);transform:translateY(-2px)}
+.btn{
+  font-family:inherit;font-size:1.02rem;cursor:pointer;border:3px solid var(--green-900);
+  background:linear-gradient(180deg,var(--green-500),var(--green-700));color:#fff;
+  border-radius:999px;padding:12px 28px;white-space:nowrap;
+  box-shadow:0 5px 0 var(--green-900);
+  transition:transform .12s ease,box-shadow .12s ease,filter .2s;
+}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-900)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn.cherry{background:linear-gradient(180deg,var(--cherry),var(--cherry-dark));border-color:var(--cherry-dark);box-shadow:0 5px 0 var(--cherry-dark)}
+.btn.cherry:active{box-shadow:0 1px 0 var(--cherry-dark)}
+
+/* ---------- video grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:26px}
+.card{
+  background:#fff;border:3px solid var(--green-300);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;
+  opacity:0;transform:translateY(26px);
+  position:relative;
+}
+.card.shown{opacity:1;transform:translateY(0)}
+.card:hover{transform:translateY(-7px) rotate(-.6deg);border-color:var(--green-500);box-shadow:0 13px 0 rgba(63,114,18,.16)}
+.thumb{
+  position:relative;aspect-ratio:16/9;cursor:pointer;overflow:hidden;
+  background:var(--green-100);display:block;width:100%;border:0;padding:0;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
+.card:hover .thumb img{transform:scale(1.08)}
+.thumb .preview{
+  position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1;
+  pointer-events:none;opacity:0;transition:opacity .45s ease;
+}
+.thumb .preview.on{opacity:1}
+.play-bubble{
+  position:absolute;inset:0;display:grid;place-items:center;z-index:2;
+  background:rgba(63,114,18,0);transition:background .25s;
+}
+.card:hover .play-bubble{background:rgba(63,114,18,.25)}
+.play-bubble span{
+  width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+  background:#fff;border:3px solid var(--green-900);color:var(--green-700);
+  font-size:1.5rem;padding-left:5px;
+  transform:scale(0);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 4px 0 rgba(63,114,18,.25);
+}
+.card:hover .play-bubble span{transform:scale(1)}
+.card-body{padding:16px 18px 18px}
+.card-title{
+  font-family:'Jua','Mochiy Pop One',var(--font-latin),sans-serif;
+  font-size:1.06rem;line-height:1.45;color:var(--ink);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  min-height:2.9em;
+}
+.card-actions{display:flex;gap:8px;margin-top:13px}
+.chip{
+  flex:1;text-align:center;text-decoration:none;cursor:pointer;font-family:inherit;
+  font-size:.88rem;color:var(--green-900);background:var(--green-100);
+  border:2.5px solid var(--green-300);border-radius:999px;padding:7px 10px;
+  transition:all .18s ease;
+}
+.chip:hover{background:var(--green-300);transform:translateY(-2px)}
+.chip.danger{color:var(--cherry-dark);background:#ffeaea;border-color:#f3bcbc}
+.chip.danger:hover{background:#ffd4d4}
+
+/* empty state */
+.empty{
+  text-align:center;padding:54px 20px;border:3px dashed var(--green-300);
+  border-radius:var(--radius);background:rgba(255,255,255,.6);
+}
+.empty .mascot-big{width:110px;height:110px;margin:0 auto 16px;animation:bob 3s ease-in-out infinite}
+.empty p{color:var(--green-700);font-size:1.12rem}
+
+/* ---------- contact ---------- */
+.contact-cards{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+.contact-card{
+  display:flex;align-items:center;gap:16px;cursor:pointer;
+  background:#fff;border:3px solid var(--green-300);border-radius:var(--radius);
+  padding:20px 28px;min-width:280px;box-shadow:var(--shadow);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;
+}
+.contact-card:hover{transform:translateY(-6px) rotate(.8deg);border-color:var(--green-500);box-shadow:0 12px 0 rgba(63,114,18,.16)}
+.contact-card:active{transform:translateY(0) scale(.97)}
+.contact-icon{
+  width:52px;height:52px;border-radius:18px;display:grid;place-items:center;flex-shrink:0;
+  background:var(--green-100);border:2.5px solid var(--green-300);font-size:1.5rem;
+}
+.contact-info b{display:block;font-family:var(--font-latin);font-weight:800;letter-spacing:.05em;color:var(--green-700);font-size:.84rem}
+.contact-info span{font-size:1.08rem;color:var(--ink)}
+.contact-hint{font-size:.78rem;color:var(--green-500);margin-left:auto;align-self:flex-start}
+
+/* ---------- footer ---------- */
+footer{
+  position:relative;z-index:1;text-align:center;padding:36px 20px 46px;
+  color:var(--green-700);font-size:.95rem;
+}
+footer .footer-mascot{width:54px;height:54px;margin:0 auto 10px;display:block;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
+
+/* ---------- modal player ---------- */
+.modal{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:22px;
+  background:rgba(58,74,42,.55);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-box{
+  width:min(900px,100%);background:#fff;border:4px solid var(--green-900);
+  border-radius:var(--radius);overflow:hidden;box-shadow:0 14px 0 rgba(0,0,0,.22);
+  transform:scale(.85) translateY(30px);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.modal.open .modal-box{transform:scale(1) translateY(0)}
+.modal-head{
+  display:flex;align-items:center;gap:12px;padding:13px 18px;
+  background:var(--green-100);border-bottom:3px solid var(--green-300);
+}
+.modal-head .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.modal-head .dot.r{background:var(--cherry)}
+.modal-head .dot.g{background:var(--green-500)}
+.modal-title{flex:1;font-family:'Jua','Mochiy Pop One',var(--font-latin),sans-serif;font-size:.98rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal-close{
+  border:2.5px solid var(--green-900);background:#fff;border-radius:50%;
+  width:34px;height:34px;cursor:pointer;font-size:1rem;color:var(--green-900);
+  transition:transform .2s,background .2s;flex-shrink:0;
+}
+.modal-close:hover{background:var(--cherry);color:#fff;border-color:var(--cherry-dark);transform:rotate(90deg)}
+.modal-video{aspect-ratio:16/9;background:#000}
+.modal-video iframe{width:100%;height:100%;display:block;border:0}
+
+/* ---------- toast ---------- */
+#toast-zone{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
+.toast{
+  background:#fff;border:3px solid var(--green-900);border-radius:999px;
+  padding:11px 26px;font-size:1rem;color:var(--ink);
+  box-shadow:0 5px 0 rgba(63,114,18,.25);
+  animation:toast-in .35s cubic-bezier(.34,1.56,.64,1),toast-out .3s ease 2.4s forwards;
+  display:flex;align-items:center;gap:9px;
+}
+.toast.err{border-color:var(--cherry-dark);box-shadow:0 5px 0 rgba(168,40,40,.25)}
+@keyframes toast-in{from{transform:translateY(40px) scale(.7);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+@keyframes toast-out{to{transform:translateY(20px) scale(.85);opacity:0}}
+
+/* melon rain (secret code) */
+.melon-rain{
+  position:fixed;top:-80px;z-index:300;pointer-events:none;
+  animation:melon-fall linear forwards;
+}
+@keyframes melon-fall{to{transform:translateY(118vh) rotate(var(--rot,360deg))}}
+
+/* click sparkles */
+.spark{
+  position:fixed;z-index:300;pointer-events:none;font-size:15px;color:var(--green-500);
+  animation:spark-pop .7s ease-out forwards;user-select:none;
+}
+@keyframes spark-pop{
+  0%{transform:translate(0,0) scale(0) rotate(0deg);opacity:1}
+  70%{opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) scale(1.25) rotate(160deg);opacity:0}
+}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s cubic-bezier(.34,1.56,.64,1)}
+.reveal.shown{opacity:1;transform:translateY(0)}
+
+@media(max-width:560px){
+  .nav-link{display:none}
+  .add-bar{flex-direction:column}
+  .hero{padding-top:48px}
+  .contact-card{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-deco" id="bgDeco"></div>
+
+<header>
+  <div class="header-inner">
+    <a class="brand" href="#top">
+      <img class="brand-logo" src="logo.png" alt="MERO"
+           onerror="this.remove();document.querySelector('.brand-fallback').style.display='flex'">
+      <span class="brand-fallback">
+        <svg class="brand-mascot" viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
+        <span class="brand-name">MERO</span>
+      </span>
+    </a>
+    <nav>
+      <a class="nav-link" href="#works" data-i18n="nav_works">작업물</a>
+      <a class="nav-link" href="#contact" data-i18n="nav_contact">연락처</a>
+      <div class="lang-toggle" id="langToggle" data-lang="ko" role="group" aria-label="language">
+        <div class="lang-pill"></div>
+        <button id="btnKo" class="active" type="button">KR</button>
+        <button id="btnJa" type="button">JP</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- mascot svg definition (melon pan from the logo) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <g id="melon-pan">
+      <path d="M50 16 C76 16 91 33 91 54 C91 74 75 85 50 85 C25 85 9 74 9 54 C9 33 24 16 50 16 Z"
+            fill="#bce98a" stroke="#3f7212" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M31 23 L76 60 M19 37 L60 73 M53 18 L85 44"
+            fill="none" stroke="#3f7212" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+      <path d="M69 23 L24 60 M81 37 L40 73 M47 18 L15 44"
+            fill="none" stroke="#3f7212" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+      <ellipse cx="33" cy="30" rx="9" ry="5" fill="#ffffff" opacity=".55" transform="rotate(-22 33 30)"/>
+    </g>
+  </defs>
+</svg>
+
+<main id="top">
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-logo" src="logo.png" alt="MERO"
+         onerror="this.style.display='none';document.getElementById('logoText').style.display='inline-block'">
+    <span class="hero-logo-text" id="logoText">MERO</span>
+    <div>
+      <span class="hero-hello" data-i18n="hero_hello">안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦</span>
+    </div>
+    <p class="hero-tagline" data-i18n="hero_tagline">이야기가 담긴 영상을 만들어요! 🍈</p>
+    <div class="hero-badges">
+      <span class="badge">MV EDIT</span>
+      <span class="badge">MOTION</span>
+      <span class="badge">AFTER EFFECTS</span>
+    </div>
+  </div>
+
+  <!-- WORKS -->
+  <section id="works" class="reveal">
+    <div class="section-title">
+      <span class="star">✦</span><h2>WORKS</h2><span class="star">✦</span>
+    </div>
+    <p class="section-sub admin-only" data-i18n="works_sub">유튜브 링크를 붙여넣으면 제목을 자동으로 가져와요!</p>
+
+    <form class="add-bar admin-only" id="addForm">
+      <input id="urlInput" type="url" inputmode="url" autocomplete="off"
+             data-i18n-placeholder="add_placeholder" placeholder="유튜브 링크를 붙여넣어 주세요!">
+      <button class="btn" id="addBtn" type="submit" data-i18n="add_btn">＋ 추가</button>
+    </form>
+    <div class="export-row admin-only">
+      <button class="chip" id="exportBtn" type="button" data-i18n="export_btn">목록 내보내기</button>
+    </div>
+
+    <div class="grid" id="videoGrid"></div>
+
+    <div class="empty" id="emptyState" hidden>
+      <svg class="mascot-big" viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
+      <p data-i18n="empty_msg">아직 영상이 없어요. 첫 작업물을 추가해 보세요!</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="reveal">
+    <div class="section-title">
+      <span class="star">✦</span><h2>CONTACT</h2><span class="star">✦</span>
+    </div>
+    <p class="section-sub" data-i18n="contact_sub">MV 제작 의뢰·문의는 아래로 연락해 주세요! (클릭하면 복사돼요)</p>
+    <div class="contact-cards">
+      <div class="contact-card" data-copy="@m3ro_3" role="button" tabindex="0">
+        <div class="contact-icon">💬</div>
+        <div class="contact-info"><b>DISCORD</b><span>@m3ro_3</span></div>
+        <span class="contact-hint">⎘</span>
+      </div>
+      <div class="contact-card" data-copy="m3ro3333@gmail.com" role="button" tabindex="0">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-info"><b>E-MAIL</b><span>m3ro3333@gmail.com</span></div>
+        <span class="contact-hint">⎘</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <svg class="footer-mascot" id="footerMascot" viewBox="0 0 100 100"><use href="#melon-pan"/></svg>
+  <p>© 2026 MERO</p>
+</footer>
+
+<!-- PLAYER MODAL -->
+<div class="modal" id="playerModal" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="dot r"></span><span class="dot g"></span>
+      <span class="modal-title" id="modalTitle"></span>
+      <button class="modal-close" id="modalClose" aria-label="close">✕</button>
+    </div>
+    <div class="modal-video" id="modalVideo"></div>
+  </div>
+</div>
+
+<div id="toast-zone"></div>
+
+<script>
+/* ============ i18n ============ */
+const I18N = {
+  ko: {
+    nav_works:'작업물', nav_contact:'연락처',
+    hero_hello:'안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦',
+    hero_tagline:'이야기가 담긴 영상을 만들어요! 🍈',
+    works_sub:'유튜브 링크를 붙여넣으면 제목을 자동으로 가져와요!',
+    add_placeholder:'유튜브 링크를 붙여넣어 주세요!',
+    add_btn:'＋ 추가', add_loading:'가져오는 중...',
+    export_btn:'목록 내보내기',
+    toast_exported:'영상 목록(JSON)을 복사했어요! ✦',
+    toast_admin_on:'편집 모드 ON! 영상을 추가할 수 있어요 🍈',
+    toast_admin_off:'편집 모드 OFF',
+    empty_msg:'아직 영상이 없어요. 첫 작업물을 추가해 보세요!',
+    contact_sub:'MV 제작 의뢰·문의는 아래로 연락해 주세요! (클릭하면 복사돼요)',
+    toast_added:'영상이 추가되었어요! 🍈',
+    toast_invalid:'올바른 유튜브 링크가 아니에요 🍒',
+    toast_dup:'이미 추가된 영상이에요!',
+    toast_titlefail:'제목을 가져오지 못해 링크로 대신 표시했어요',
+    toast_copied:'복사되었어요! ✦',
+    toast_deleted:'영상을 삭제했어요',
+    confirm_delete:'이 영상을 삭제할까요?',
+    chip_watch:'YouTube ↗', chip_delete:'삭제',
+    untitled:'(제목 없음)'
+  },
+  ja: {
+    nav_works:'作品', nav_contact:'連絡先',
+    hero_hello:'こんにちは！サブカルMVエディターのMEROです ✦',
+    hero_tagline:'物語が詰まった映像を作ります！🍈',
+    works_sub:'YouTubeリンクを貼ると、タイトルを自動で取得します！',
+    add_placeholder:'YouTubeリンクを貼り付けてください！',
+    add_btn:'＋ 追加', add_loading:'取得中...',
+    export_btn:'リストを書き出す',
+    toast_exported:'動画リスト(JSON)をコピーしました！✦',
+    toast_admin_on:'編集モードON！動画を追加できます 🍈',
+    toast_admin_off:'編集モードOFF',
+    empty_msg:'まだ動画がありません。最初の作品を追加してみましょう！',
+    contact_sub:'MV制作のご依頼・お問い合わせはこちらへ！（クリックでコピー）',
+    toast_added:'動画を追加しました！🍈',
+    toast_invalid:'正しいYouTubeリンクではありません 🍒',
+    toast_dup:'すでに追加された動画です！',
+    toast_titlefail:'タイトルを取得できなかったため、リンクを表示します',
+    toast_copied:'コピーしました！✦',
+    toast_deleted:'動画を削除しました',
+    confirm_delete:'この動画を削除しますか？',
+    chip_watch:'YouTube ↗', chip_delete:'削除',
+    untitled:'（タイトルなし）'
+  }
+};
+let lang = localStorage.getItem('mero_lang') || 'ko';
+const t = key => (I18N[lang] && I18N[lang][key]) || I18N.ko[key] || key;
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.getElementById('langToggle').dataset.lang = lang;
+  document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+  document.getElementById('btnJa').classList.toggle('active', lang === 'ja');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  renderVideos(); // refresh chip labels
+}
+function setLang(next) {
+  if (lang === next) return;
+  lang = next;
+  localStorage.setItem('mero_lang', lang);
+  applyLang();
+}
+document.getElementById('btnKo').addEventListener('click', () => setLang('ko'));
+document.getElementById('btnJa').addEventListener('click', () => setLang('ja'));
+
+/* ============ toast ============ */
+function toast(msg, isErr = false) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (isErr ? ' err' : '');
+  el.textContent = msg;
+  document.getElementById('toast-zone').appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
+
+/* ============ video store ============ */
+/* 사이트를 웹에 공개할 때는, 편집 모드의 "목록 내보내기"로 복사한 JSON을
+   아래 SEED_VIDEOS 대괄호 안에 붙여넣으면 방문자에게도 같은 목록이 보입니다. */
+const SEED_VIDEOS = [];
+let videos = [];
+try { videos = JSON.parse(localStorage.getItem('mero_videos') || 'null') || []; } catch (e) { videos = []; }
+if (!videos.length) videos = SEED_VIDEOS.slice();
+const saveVideos = () => localStorage.setItem('mero_videos', JSON.stringify(videos));
+
+function parseYouTubeId(url) {
+  try {
+    const u = new URL(url.trim());
+    const host = u.hostname.replace(/^www\.|^m\./, '');
+    if (host === 'youtu.be') return u.pathname.slice(1).split('/')[0] || null;
+    if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
+      if (u.pathname === '/watch') return u.searchParams.get('v');
+      const m = u.pathname.match(/^\/(shorts|embed|live|v)\/([\w-]{6,})/);
+      if (m) return m[2];
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function fetchTitle(id) {
+  const watchUrl = `https://www.youtube.com/watch?v=${id}`;
+  const endpoints = [
+    `https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(watchUrl)}`,
+    `https://noembed.com/embed?url=${encodeURIComponent(watchUrl)}`
+  ];
+  for (const ep of endpoints) {
+    try {
+      const r = await fetch(ep);
+      if (r.ok) {
+        const d = await r.json();
+        if (d && d.title) return d.title;
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
+/* ============ render ============ */
+function renderVideos() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = '';
+  document.getElementById('emptyState').hidden = videos.length > 0;
+
+  videos.forEach((v, i) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <button class="thumb" type="button" aria-label="play">
+        <img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg"
+             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" alt="">
+        <span class="play-bubble"><span>▶</span></span>
+      </button>
+      <div class="card-body">
+        <p class="card-title"></p>
+        <div class="card-actions">
+          <a class="chip" target="_blank" rel="noopener"
+             href="https://www.youtube.com/watch?v=${v.id}">${t('chip_watch')}</a>
+          <button class="chip danger admin-only" type="button">${t('chip_delete')}</button>
+        </div>
+      </div>`;
+    card.querySelector('.card-title').textContent = v.title || t('untitled');
+
+    /* hover preview: 잠시 머무르면 음소거 미리보기 재생 */
+    const thumbEl = card.querySelector('.thumb');
+    let pvTimer = null, pv = null;
+    const stopPreview = () => {
+      clearTimeout(pvTimer);
+      if (pv) { pv.remove(); pv = null; }
+    };
+    thumbEl.addEventListener('mouseenter', () => {
+      pvTimer = setTimeout(() => {
+        pv = document.createElement('iframe');
+        pv.className = 'preview';
+        pv.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${v.id}`;
+        pv.allow = 'autoplay; encrypted-media';
+        pv.tabIndex = -1;
+        pv.addEventListener('load', () => { if (pv) pv.classList.add('on'); });
+        thumbEl.appendChild(pv);
+      }, 550);
+    });
+    thumbEl.addEventListener('mouseleave', stopPreview);
+    thumbEl.addEventListener('click', () => { stopPreview(); openPlayer(v); });
+    card.querySelector('.chip.danger').addEventListener('click', () => {
+      if (!confirm(t('confirm_delete'))) return;
+      videos = videos.filter(x => x.id !== v.id);
+      saveVideos();
+      renderVideos();
+      toast(t('toast_deleted'));
+    });
+    grid.appendChild(card);
+    setTimeout(() => card.classList.add('shown'), 40 * i + 30);
+  });
+}
+
+/* ============ add video ============ */
+document.getElementById('addForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const input = document.getElementById('urlInput');
+  const btn = document.getElementById('addBtn');
+  const id = parseYouTubeId(input.value);
+  if (!id) { toast(t('toast_invalid'), true); input.focus(); return; }
+  if (videos.some(v => v.id === id)) { toast(t('toast_dup'), true); return; }
+
+  btn.disabled = true;
+  btn.textContent = t('add_loading');
+  const title = await fetchTitle(id);
+  btn.disabled = false;
+  btn.textContent = t('add_btn');
+
+  videos.unshift({ id, title: title || '' });
+  saveVideos();
+  input.value = '';
+  renderVideos();
+  toast(title ? t('toast_added') : t('toast_titlefail'), !title);
+});
+
+/* ============ player modal ============ */
+const modal = document.getElementById('playerModal');
+function openPlayer(v) {
+  document.getElementById('modalTitle').textContent = v.title || t('untitled');
+  document.getElementById('modalVideo').innerHTML =
+    `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0"
+       title="player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closePlayer() {
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  setTimeout(() => { document.getElementById('modalVideo').innerHTML = ''; }, 280);
+}
+document.getElementById('modalClose').addEventListener('click', closePlayer);
+modal.addEventListener('click', e => { if (e.target === modal) closePlayer(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closePlayer(); });
+
+/* ============ clipboard helper ============ */
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); ta.remove();
+  }
+}
+
+/* ============ contact copy ============ */
+document.querySelectorAll('.contact-card').forEach(card => {
+  const copy = async () => {
+    await copyText(card.dataset.copy);
+    toast(t('toast_copied'));
+  };
+  card.addEventListener('click', copy);
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copy(); } });
+});
+
+/* ============ click sparkles ============ */
+document.addEventListener('pointerdown', e => {
+  const chars = ['✦', '✧', '🍒', '✦'];
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark';
+    s.textContent = chars[i % chars.length];
+    const ang = (Math.PI * 2 * i) / 5 + Math.random();
+    s.style.setProperty('--dx', `${Math.cos(ang) * (30 + Math.random() * 26)}px`);
+    s.style.setProperty('--dy', `${Math.sin(ang) * (30 + Math.random() * 26)}px`);
+    s.style.left = `${e.clientX - 7}px`;
+    s.style.top = `${e.clientY - 7}px`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 750);
+  }
+});
+
+/* ============ bg deco ============ */
+(() => {
+  const zone = document.getElementById('bgDeco');
+  const chars = ['✦', '✧', '⭐', '✦', '🍈', '✧'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.textContent = chars[i % chars.length];
+    s.style.left = `${Math.random() * 96}%`;
+    s.style.top = `${Math.random() * 92}%`;
+    s.style.fontSize = `${12 + Math.random() * 18}px`;
+    s.style.animationDelay = `${Math.random() * 6}s`;
+    s.style.animationDuration = `${5 + Math.random() * 5}s`;
+    zone.appendChild(s);
+  }
+})();
+
+/* ============ scroll reveal ============ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('shown'); io.unobserve(en.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ============ hidden edit mode ============ */
+/* 푸터의 멜론빵을 1.2초 안에 5번 연속 클릭하면 편집 모드가 켜지고 꺼져요 */
+let editMode = sessionStorage.getItem('mero_admin') === '1';
+const applyAdmin = () => document.body.classList.toggle('admin', editMode);
+let tapCount = 0, tapTimer = null;
+document.getElementById('footerMascot').addEventListener('click', () => {
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => { tapCount = 0; }, 1200);
+  if (tapCount >= 5) {
+    tapCount = 0;
+    editMode = !editMode;
+    sessionStorage.setItem('mero_admin', editMode ? '1' : '0');
+    applyAdmin();
+    toast(editMode ? t('toast_admin_on') : t('toast_admin_off'));
+  }
+});
+
+/* 편집 모드 전용: 영상 목록을 JSON으로 복사 (배포 시 SEED_VIDEOS에 붙여넣기) */
+document.getElementById('exportBtn').addEventListener('click', async () => {
+  await copyText(JSON.stringify(videos, null, 2));
+  toast(t('toast_exported'));
+});
+
+/* ============ secret code: MERO0420 → melon rain ============ */
+const SECRET = 'mero0420';
+let keyBuf = '';
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea') || e.key.length !== 1) return;
+  keyBuf = (keyBuf + e.key.toLowerCase()).slice(-SECRET.length);
+  if (keyBuf === SECRET) { keyBuf = ''; melonRain(); }
+});
+function melonRain() {
+  toast('🍈 MERO TIME! 🍈');
+  for (let i = 0; i < 36; i++) {
+    const m = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    m.setAttribute('viewBox', '0 0 100 100');
+    m.innerHTML = '<use href="#melon-pan"/>';
+    m.classList.add('melon-rain');
+    const size = 26 + Math.random() * 36;
+    m.style.width = m.style.height = `${size}px`;
+    m.style.left = `${Math.random() * 97}vw`;
+    m.style.setProperty('--rot', `${(Math.random() < .5 ? -1 : 1) * (240 + Math.random() * 480)}deg`);
+    m.style.animationDuration = `${2.2 + Math.random() * 2.4}s`;
+    m.style.animationDelay = `${Math.random() * 1.4}s`;
+    document.body.appendChild(m);
+    setTimeout(() => m.remove(), 6500);
+  }
+}
+
+applyAdmin();
+applyLang();
+</script>
+</body>
+</html>
