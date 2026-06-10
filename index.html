@@ -360,6 +360,67 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s cubic-bezier(.34,1.56,.64,1)}
 .reveal.shown{opacity:1;transform:translateY(0)}
 
+/* ---------- FAQ chat ---------- */
+.chat-fab{
+  position:fixed;right:22px;bottom:22px;z-index:95;
+  width:62px;height:62px;border-radius:50%;cursor:pointer;
+  border:3px solid var(--green-900);
+  background:linear-gradient(180deg,#fff,var(--green-100));
+  display:grid;place-items:center;
+  box-shadow:0 6px 0 rgba(63,114,18,.25);
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;
+}
+.chat-fab:hover{transform:scale(1.1) rotate(-6deg)}
+.chat-fab:active{transform:translateY(4px) scale(.95);box-shadow:0 1px 0 rgba(63,114,18,.25)}
+.chat-fab svg{width:40px;height:40px}
+.chat-fab .fab-badge{
+  position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:50%;
+  background:var(--cherry);border:2.5px solid #fff;
+}
+.chat-panel{
+  position:fixed;right:22px;bottom:96px;z-index:95;
+  width:min(350px,calc(100vw - 34px));height:min(490px,calc(100vh - 130px));
+  background:var(--cream);border:3px solid var(--green-900);border-radius:24px;
+  box-shadow:0 10px 0 rgba(63,114,18,.2);
+  display:flex;flex-direction:column;overflow:hidden;
+  opacity:0;pointer-events:none;transform:translateY(24px) scale(.9);transform-origin:bottom right;
+  transition:opacity .25s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.chat-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.chat-head{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--green-100);border-bottom:3px solid var(--green-300);
+}
+.chat-head svg{width:30px;height:30px}
+.chat-head b{font-family:var(--font-latin);font-weight:800;color:var(--green-700);letter-spacing:.05em;font-size:1.05rem}
+.chat-head .status{margin-left:auto;font-size:.75rem;color:var(--green-700);display:flex;align-items:center;gap:5px}
+.chat-head .status::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--green-500);animation:twinkle 2s ease-in-out infinite}
+.chat-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.chat-body::-webkit-scrollbar{width:8px}
+.chat-body::-webkit-scrollbar-thumb{background:var(--green-300);border-radius:99px}
+.msg{
+  max-width:84%;padding:10px 14px;border-radius:18px;font-size:.94rem;line-height:1.55;
+  font-family:'Jua','Mochiy Pop One',var(--font-latin),sans-serif;
+  animation:msg-pop .32s cubic-bezier(.34,1.56,.64,1);word-break:break-word;
+  white-space:pre-line;
+}
+.msg.bot{align-self:flex-start;background:#fff;border:2.5px solid var(--green-300);border-bottom-left-radius:6px;color:var(--ink)}
+.msg.user{align-self:flex-end;background:linear-gradient(180deg,var(--green-500),var(--green-700));border:2.5px solid var(--green-900);color:#fff;border-bottom-right-radius:6px}
+@keyframes msg-pop{from{transform:translateY(12px) scale(.85);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.msg.typing{display:flex;gap:5px;align-items:center;padding:13px 16px}
+.msg.typing i{width:7px;height:7px;border-radius:50%;background:var(--green-500);animation:tdot 1s ease-in-out infinite}
+.msg.typing i:nth-child(2){animation-delay:.15s}
+.msg.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tdot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-chips{display:flex;flex-direction:column;gap:7px;align-items:flex-end;animation:msg-pop .32s cubic-bezier(.34,1.56,.64,1)}
+.chat-chips button{
+  font-family:'Jua','Mochiy Pop One',var(--font-latin),sans-serif;
+  font-size:.88rem;color:var(--green-700);background:#fff;
+  border:2.5px solid var(--green-300);border-radius:999px;padding:8px 15px;cursor:pointer;
+  transition:all .18s ease;
+}
+.chat-chips button:hover{background:var(--green-100);border-color:var(--green-500);transform:translateX(-4px)}
+
 @media(max-width:560px){
   .nav-link{display:none}
   .add-bar{flex-direction:column}
@@ -494,6 +555,20 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
   </div>
 </div>
 
+<!-- FAQ CHAT -->
+<div class="chat-panel" id="chatPanel" aria-hidden="true">
+  <div class="chat-head">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
+    <b>MERO BOT</b>
+    <span class="status" data-i18n="chat_status">온라인</span>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+</div>
+<button class="chat-fab" id="chatFab" type="button" aria-label="FAQ chat">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
+  <span class="fab-badge"></span>
+</button>
+
 <div id="toast-zone"></div>
 
 <script>
@@ -522,7 +597,10 @@ const I18N = {
     toast_deleted:'영상을 삭제했어요',
     confirm_delete:'이 영상을 삭제할까요?',
     chip_watch:'YouTube ↗', chip_delete:'삭제',
-    untitled:'(제목 없음)'
+    untitled:'(제목 없음)',
+    chat_status:'온라인',
+    chat_greet:'안녕하세요! MERO의 메론빵 봇이에요. 궁금한 걸 골라주세요 🍈',
+    chat_more:'다른 질문도 있나요?'
   },
   ja: {
     nav_works:'作品', nav_contact:'連絡先',
@@ -547,7 +625,10 @@ const I18N = {
     toast_deleted:'動画を削除しました',
     confirm_delete:'この動画を削除しますか？',
     chip_watch:'YouTube ↗', chip_delete:'削除',
-    untitled:'（タイトルなし）'
+    untitled:'（タイトルなし）',
+    chat_status:'オンライン',
+    chat_greet:'こんにちは！MEROのメロンパンボットです。気になる質問を選んでください🍈',
+    chat_more:'他の質問はありますか？'
   }
 };
 let lang = localStorage.getItem('mero_lang') || 'ja';
@@ -567,6 +648,7 @@ function setLang(next) {
   lang = next;
   localStorage.setItem('mero_lang', lang);
   applyLang();
+  resetChat(); // 챗봇도 새 언어로 다시 시작
 }
 document.getElementById('btnKo').addEventListener('click', () => setLang('ko'));
 document.getElementById('btnJa').addEventListener('click', () => setLang('ja'));
@@ -854,8 +936,95 @@ document.getElementById('exportBtn').addEventListener('click', async () => {
   toast(t('toast_exported'));
 });
 
+/* ============ FAQ chat bot ============ */
+/* 질문/답변은 아래에서 자유롭게 수정·추가하세요 (ko/ja 한 쌍씩) */
+const FAQ = [
+  {
+    q: { ko: '의뢰는 어떻게 하나요?', ja: 'ご依頼はどうすればいいですか？' },
+    a: { ko: '디스코드 또는 이메일로 곡 정보와 원하시는 컨셉, 희망 일정 등 작업에 대한 내용을 편하게 보내주세요.\n\n의뢰 내용 확인 후 상담을 통해 작업 방향과 일정, 견적 등을 함께 조율하여 진행해요!',
+         ja: 'Discordまたはメールに、曲の情報やご希望のコンセプト、スケジュールなど、作業に関する内容をお気軽にお送りください。\n\n内容を確認したあと、ご相談を通じて作業の方向性・スケジュール・お見積りなどを一緒にすり合わせて進めます！' }
+  },
+  {
+    q: { ko: '비용은 어떻게 되나요?', ja: '料金はいくらですか？' },
+    a: { ko: '곡 길이와 연출 난이도에 따라 달라져서, 문의해 주시면 견적을 안내드려요. 부담 없이 물어봐 주세요!',
+         ja: '曲の長さや演出の内容によって変わるので、お問い合わせいただければお見積りをご案内します。お気軽にどうぞ！' }
+  },
+  {
+    q: { ko: '어떤 영상을 만들 수 있나요?', ja: 'どんな映像が作れますか？' },
+    a: { ko: '커버곡 MV, 오리지널 곡 MV 등 이야기가 담긴 영상이라면 무엇이든 환영해요! WORKS에서 다양한 작업물을 확인해 보세요! ✦',
+         ja: 'カバーMV、オリジナルMVなど、物語のある映像なら何でも大歓迎です！WORKSでいろいろな作品をチェックしてみてください！✦' }
+  },
+  {
+    q: { ko: '다른 질문이 있어요.', ja: '他に質問があります。' },
+    a: { ko: '디스코드 또는 이메일로 어떤 내용이든 편하게 문의해 주세요!\n\nMERO는 언제나 여러분의 이야기를 기다리고 있어요✦',
+         ja: 'Discordまたはメールに、どんな内容でもお気軽にお問い合わせください！\n\nMEROはいつでも皆さんの物語をお待ちしています✦' }
+  }
+];
+
+const chatPanel = document.getElementById('chatPanel');
+const chatBody = document.getElementById('chatBody');
+let chatStarted = false, chatBusy = false;
+
+function chatMsg(cls, text) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.textContent = text;
+  chatBody.appendChild(d);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return d;
+}
+function chatChips() {
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-chips';
+  FAQ.forEach(item => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = item.q[lang] || item.q.ko;
+    b.addEventListener('click', () => askFaq(item, wrap));
+    wrap.appendChild(b);
+  });
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+function askFaq(item, chipsEl) {
+  if (chatBusy) return;
+  chatBusy = true;
+  chipsEl.remove();
+  chatMsg('user', item.q[lang] || item.q.ko);
+  const tp = document.createElement('div');
+  tp.className = 'msg bot typing';
+  tp.innerHTML = '<i></i><i></i><i></i>';
+  setTimeout(() => { chatBody.appendChild(tp); chatBody.scrollTop = chatBody.scrollHeight; }, 350);
+  setTimeout(() => {
+    tp.remove();
+    chatMsg('bot', item.a[lang] || item.a.ko);
+    setTimeout(() => {
+      chatMsg('bot', t('chat_more'));
+      chatChips();
+      chatBusy = false;
+    }, 600);
+  }, 1500);
+}
+function startChat() {
+  if (chatStarted) return;
+  chatStarted = true;
+  chatMsg('bot', t('chat_greet'));
+  chatChips();
+}
+function resetChat() {
+  chatBody.innerHTML = '';
+  chatStarted = false;
+  chatBusy = false;
+  if (chatPanel.classList.contains('open')) startChat();
+}
+document.getElementById('chatFab').addEventListener('click', () => {
+  const open = chatPanel.classList.toggle('open');
+  chatPanel.setAttribute('aria-hidden', String(!open));
+  if (open) startChat();
+});
+
 /* ============ secret code: MERO0420 → melon rain ============ */
-const SECRET = 'mero0420';
+const SECRET = 'mero';
 let keyBuf = '';
 document.addEventListener('keydown', e => {
   if (e.target.matches('input,textarea') || e.key.length !== 1) return;
