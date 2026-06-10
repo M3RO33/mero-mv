@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -530,7 +530,7 @@ const I18N = {
     untitled:'（タイトルなし）'
   }
 };
-let lang = localStorage.getItem('mero_lang') || 'ko';
+let lang = localStorage.getItem('mero_lang') || 'ja';
 const t = key => (I18N[lang] && I18N[lang][key]) || I18N.ko[key] || key;
 
 function applyLang() {
