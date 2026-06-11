@@ -677,9 +677,17 @@ const SEED_VIDEOS = [
   { "id": "8QXJtwJ15S0", "title": "【歌ってみた】JANE DOE【covered by 汐鳴みりね / ななしいんく】" },
   { "id": "N1_OE0bcL3c", "title": "【歌ってみた】プロポーズ / covered by #花冠あむる【内緒のピアス】" }
 ];
+/* 편집 모드 ON: 내 브라우저에 저장된 개인 목록 / OFF: 방문자에게 보이는 공식 목록(SEED) */
 let videos = [];
-try { videos = JSON.parse(localStorage.getItem('mero_videos') || 'null') || []; } catch (e) { videos = []; }
-if (!videos.length) videos = SEED_VIDEOS.slice();
+function loadVideos() {
+  if (editMode) {
+    try {
+      const saved = JSON.parse(localStorage.getItem('mero_videos') || 'null');
+      if (Array.isArray(saved) && saved.length) return saved;
+    } catch (e) {}
+  }
+  return SEED_VIDEOS.slice();
+}
 const saveVideos = () => localStorage.setItem('mero_videos', JSON.stringify(videos));
 
 function parseYouTubeId(url) {
@@ -927,6 +935,8 @@ document.getElementById('footerMascot').addEventListener('click', () => {
     editMode = !editMode;
     sessionStorage.setItem('mero_admin', editMode ? '1' : '0');
     applyAdmin();
+    videos = loadVideos();
+    renderVideos();
     toast(editMode ? t('toast_admin_on') : t('toast_admin_off'));
   }
 });
@@ -1051,6 +1061,7 @@ function melonRain() {
 }
 
 applyAdmin();
+videos = loadVideos();
 applyLang();
 </script>
 </body>
