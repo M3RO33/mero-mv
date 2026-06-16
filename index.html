@@ -679,16 +679,23 @@ const SEED_VIDEOS = [
 ];
 /* 편집 모드 ON: 내 브라우저에 저장된 개인 목록 / OFF: 방문자에게 보이는 공식 목록(SEED) */
 let videos = [];
+const seedSig = () => SEED_VIDEOS.map(v => v.id).join(',');
 function loadVideos() {
   if (editMode) {
     try {
       const saved = JSON.parse(localStorage.getItem('mero_videos') || 'null');
-      if (Array.isArray(saved) && saved.length) return saved;
+      const base = localStorage.getItem('mero_videos_base');
+      /* 저장해 둔 편집본은 공식 목록(SEED)이 그대로일 때만 이어서 보여줘요.
+         새 영상이 SEED에 푸시돼서 base가 달라졌으면, 최신 공식 목록으로 새로 시작합니다. */
+      if (Array.isArray(saved) && saved.length && base === seedSig()) return saved;
     } catch (e) {}
   }
   return SEED_VIDEOS.slice();
 }
-const saveVideos = () => localStorage.setItem('mero_videos', JSON.stringify(videos));
+const saveVideos = () => {
+  localStorage.setItem('mero_videos', JSON.stringify(videos));
+  localStorage.setItem('mero_videos_base', seedSig());
+};
 
 function parseYouTubeId(url) {
   try {
