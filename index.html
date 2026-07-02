@@ -748,8 +748,8 @@ function renderVideos() {
     card.className = 'card';
     card.innerHTML = `
       <button class="thumb" type="button" aria-label="play">
-        <img loading="lazy" draggable="false" src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg"
-             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.id}/hqdefault.jpg'" alt="">
+        <img class="thumb-img" loading="lazy" draggable="false"
+             src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="">
         <span class="play-bubble"><span>▶</span></span>
       </button>
       <div class="card-body">
@@ -761,6 +761,13 @@ function renderVideos() {
         </div>
       </div>`;
     card.querySelector('.card-title').textContent = v.title || t('untitled');
+
+    /* 썸네일: hqdefault를 기본으로 쓰고, 고화질(maxres)이 있으면 자동 업그레이드.
+       maxres가 없는 영상(404)은 hqdefault 그대로 유지돼서 회색으로 안 떠요. */
+    const thumbImg = card.querySelector('.thumb-img');
+    const hi = new Image();
+    hi.onload = () => { if (hi.naturalWidth > 120) thumbImg.src = hi.src; };
+    hi.src = `https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg`;
 
     /* hover preview: 잠시 머무르면 음소거 미리보기 재생 */
     const thumbEl = card.querySelector('.thumb');
