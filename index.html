@@ -210,7 +210,7 @@ body:not(.admin) .admin-only{display:none !important}
 .card{
   background:#fff;border:3px solid var(--green-300);border-radius:var(--radius);
   overflow:hidden;box-shadow:var(--shadow);
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;
+  transition:opacity .5s ease,transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s;
   opacity:0;transform:translateY(26px);
   position:relative;
 }
@@ -260,6 +260,20 @@ body.admin .card:active{cursor:grabbing}
 .chip:hover{background:var(--green-300);transform:translateY(-2px)}
 .chip.danger{color:var(--cherry-dark);background:#ffeaea;border-color:#f3bcbc}
 .chip.danger:hover{background:#ffd4d4}
+
+/* more / less button */
+.more-row{text-align:center;margin-top:30px}
+.btn-more{
+  font-family:'Jua','Mochiy Pop One',var(--font-latin),sans-serif;
+  font-size:1.02rem;cursor:pointer;color:var(--green-900);
+  background:#fff;border:3px solid var(--green-300);border-radius:999px;
+  padding:12px 40px;box-shadow:0 5px 0 rgba(63,114,18,.15);
+  transition:transform .12s ease,box-shadow .12s ease,background .2s,border-color .2s;
+}
+.btn-more:hover{background:var(--green-100);border-color:var(--green-500);transform:translateY(-2px)}
+.btn-more:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(63,114,18,.15)}
+.btn-more::after{content:' ▾';font-size:.85em}
+.btn-more.less::after{content:' ▴'}
 
 /* empty state */
 .empty{
@@ -511,6 +525,10 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 
     <div class="grid" id="videoGrid"></div>
 
+    <div class="more-row" id="moreRow" hidden>
+      <button class="btn-more" id="moreBtn" type="button"></button>
+    </div>
+
     <div class="empty" id="emptyState" hidden>
       <svg class="mascot-big" viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
       <p data-i18n="empty_msg">아직 영상이 없어요. 첫 작업물을 추가해 보세요!</p>
@@ -600,7 +618,8 @@ const I18N = {
     untitled:'(제목 없음)',
     chat_status:'온라인',
     chat_greet:'안녕하세요! MERO의 메론빵 봇이에요. 궁금한 걸 골라주세요 🍈',
-    chat_more:'다른 질문도 있나요?'
+    chat_more:'다른 질문도 있나요?',
+    show_more:'더보기', show_less:'접기'
   },
   ja: {
     nav_works:'作品', nav_contact:'連絡先',
@@ -628,7 +647,8 @@ const I18N = {
     untitled:'（タイトルなし）',
     chat_status:'オンライン',
     chat_greet:'こんにちは！MEROのメロンパンボットです。気になる質問を選んでください🍈',
-    chat_more:'他の質問はありますか？'
+    chat_more:'他の質問はありますか？',
+    show_more:'もっと見る', show_less:'閉じる'
   }
 };
 let lang = localStorage.getItem('mero_lang') || 'ja';
@@ -740,12 +760,24 @@ let dragMoved = false;
 document.getElementById('videoGrid').addEventListener('dragover', e => {
   if (editMode) e.preventDefault();
 });
-function renderVideos() {
-  const grid = document.getElementById('videoGrid');
-  grid.innerHTML = '';
-  document.getElementById('emptyState').hidden = videos.length > 0;
+const INITIAL_COUNT = 6;
+const STEP = 6;
+let visibleCount = INITIAL_COUNT;
 
-  videos.forEach((v, i) => {
+function updateMoreBtn() {
+  const row = document.getElementById('moreRow');
+  const btn = document.getElementById('moreBtn');
+  if (editMode || videos.length <= INITIAL_COUNT) { row.hidden = true; return; }
+  row.hidden = false;
+  const remaining = videos.length - visibleCount;
+  const collapsed = remaining <= 0;
+  const next = Math.min(STEP, remaining);
+  btn.textContent = collapsed ? t('show_less') : `${t('show_more')} (+${next})`;
+  btn.classList.toggle('less', collapsed);
+}
+
+function createCard(v) {
+    const grid = document.getElementById('videoGrid');
     const card = document.createElement('article');
     card.className = 'card';
     card.innerHTML = `
@@ -827,10 +859,42 @@ function renderVideos() {
       renderVideos();
       toast(t('toast_deleted'));
     });
-    grid.appendChild(card);
-    setTimeout(() => card.classList.add('shown'), 40 * i + 30);
-  });
+    return card;
 }
+
+function revealCard(card, i) {
+  document.getElementById('videoGrid').appendChild(card);
+  setTimeout(() => card.classList.add('shown'), 45 * i + 20);
+}
+
+function renderVideos() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = '';
+  document.getElementById('emptyState').hidden = videos.length > 0;
+  const count = editMode ? videos.length : Math.min(visibleCount, videos.length);
+  for (let i = 0; i < count; i++) revealCard(createCard(videos[i]), i);
+  updateMoreBtn();
+}
+
+/* 더보기: 기존 카드는 그대로 두고 다음 6개만 이어 붙여서 부드럽게 등장 */
+function showMore() {
+  const grid = document.getElementById('videoGrid');
+  const start = grid.children.length;
+  const end = Math.min(start + STEP, videos.length);
+  for (let i = start; i < end; i++) revealCard(createCard(videos[i]), i - start);
+  visibleCount = end;
+  updateMoreBtn();
+}
+
+document.getElementById('moreBtn').addEventListener('click', () => {
+  if (visibleCount >= videos.length) {
+    visibleCount = INITIAL_COUNT;
+    renderVideos();
+    document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
+  } else {
+    showMore();
+  }
+});
 
 /* ============ add video ============ */
 document.getElementById('addForm').addEventListener('submit', async e => {
