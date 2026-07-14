@@ -18,17 +18,12 @@ function Read-VideosFromClipboard {
   foreach ($v in $data) { if (-not $v.id -or -not $v.title) { throw "목록에 id/title이 없어요. '목록 내보내기'로 복사한 내용인지 확인해 주세요." } }
   return $data
 }
-function Write-Seed($data) {
+function Build-SeedBlock($data) {
   $lines = foreach ($v in $data) {
     $t = ([string]$v.title) -replace '\\', '\\' -replace '"', '\"'
     '  { "id": "' + $v.id + '", "title": "' + $t + '" }'
   }
-  $block = "const SEED_VIDEOS = [`n" + ($lines -join ",`n") + "`n];"
-  $content = [System.IO.File]::ReadAllText($indexPath)
-  $rx = [regex]'(?s)const SEED_VIDEOS = \[.*?\];'
-  if (-not $rx.IsMatch($content)) { throw "index.html에서 목록 위치(SEED_VIDEOS)를 못 찾았어요." }
-  $content = $rx.Replace($content, { param($m) $block }, 1)
-  [System.IO.File]::WriteAllText($indexPath, $content, (New-Object System.Text.UTF8Encoding($false)))
+  "const SEED_VIDEOS = [`n" + ($lines -join ",`n") + "`n];"
 }
 
 # ---------- 화면(XAML) ----------
@@ -375,27 +370,38 @@ $BtnUpdate.Add_Click({
       $num = 1
       foreach ($v in $data) { [void]$LstVideos.Items.Add(("{0,2}.  {1}" -f $num, $v.title)); $num++ }
       $LblCount.Text = ("{0} VIDEOS" -f $data.Count)
-      Set-Status "index.html 반영 중... 📝" "#5A9622"
-      Write-Seed $data
+      Set-Status "목록 준비 중... 📝" "#5A9622"
+      $block = Build-SeedBlock $data
       $script:count = $data.Count
       Set-Status "업로드 중... 잠시만요 🚀" "#5A9622"
       $Bar.Visibility = 'Visible'
       $script:ps = [PowerShell]::Create()
       [void]$script:ps.AddScript({
-          param($dir, $count)
+          param($dir, $count, $block)
           Set-Location $dir
           # 갓 clone한 저장소엔 git 신원이 없어서 commit이 조용히 실패함 → 없으면 자동 설정
           if (-not (git config user.email)) {
             git config user.email "m3ro3333@gmail.com"
             git config user.name  "MERO"
           }
-          & git add index.html 2>&1 | Out-Null
-          & git commit -q -m "Update video list ($count videos)" 2>&1 | Out-Null
-          & git pull --rebase 2>&1 | Out-Null
-          $out = & git push 2>&1
+          # 항상 최신 원본을 기준으로 목록을 다시 얹어 올림 (뒤처짐/충돌 방지)
+          git fetch origin 2>&1 | Out-Null
+          if ($LASTEXITCODE -ne 0) { return "FAIL: 인터넷 연결 또는 GitHub 접속에 실패했어요 (git fetch)" }
+          git reset --hard origin/main 2>&1 | Out-Null
+          $idx = Join-Path $dir 'index.html'
+          $content = [System.IO.File]::ReadAllText($idx)
+          $s = $content.IndexOf('const SEED_VIDEOS = [')
+          $e = if ($s -ge 0) { $content.IndexOf('];', $s) } else { -1 }
+          if ($s -lt 0 -or $e -lt 0) { return "FAIL: index.html에서 목록 위치를 못 찾았어요" }
+          $newContent = $content.Substring(0, $s) + $block + $content.Substring($e + 2)
+          [System.IO.File]::WriteAllText($idx, $newContent, (New-Object System.Text.UTF8Encoding($false)))
+          git add index.html 2>&1 | Out-Null
+          if ([string]::IsNullOrWhiteSpace((git status --porcelain))) { return "OK" }
+          git commit -q -m "Update video list ($count videos)" 2>&1 | Out-Null
+          $out = git push 2>&1
           if ($LASTEXITCODE -ne 0) { return ("FAIL:" + (($out | Out-String).Trim())) }
           return "OK"
-        }).AddParameter('dir', $scriptDir).AddParameter('count', $script:count)
+        }).AddParameter('dir', $scriptDir).AddParameter('count', $script:count).AddParameter('block', $block)
       $script:handle = $script:ps.BeginInvoke()
       $script:timer = New-Object System.Windows.Threading.DispatcherTimer
       $script:timer.Interval = [TimeSpan]::FromMilliseconds(200)
