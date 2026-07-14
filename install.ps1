@@ -5,7 +5,6 @@
 #  Git / GitHub CLI 자동 설치 + 저장소 다운로드 + 바로가기 생성
 # ============================================================
 
-$ErrorActionPreference = 'Stop'
 $repoUrl   = 'https://github.com/M3RO33/mero-mv.git'
 $targetDir = Join-Path $env:USERPROFILE 'mero-mv'
 
@@ -56,7 +55,7 @@ if (Have gh) {
 # ---------- 3) GitHub 로그인 ----------
 $loggedIn = $false
 if (Have gh) {
-  gh auth status 2>&1 | Out-Null
+  gh auth status *> $null
   $loggedIn = ($LASTEXITCODE -eq 0)
 }
 if ($loggedIn) {
@@ -68,7 +67,7 @@ if ($loggedIn) {
   Say "   (화면의 XXXX-XXXX 코드를 브라우저에 입력 → Authorize)" Gray
   Write-Host ""
   gh auth login --hostname github.com --git-protocol https --web
-  gh auth status 2>&1 | Out-Null
+  gh auth status *> $null
   if ($LASTEXITCODE -ne 0) { Say "   로그인이 완료되지 않았어요. 다시 실행해 주세요." Red; return }
   Say "   로그인 완료 ✓" Green
 }
@@ -89,6 +88,10 @@ if (Test-Path (Join-Path $targetDir '.git')) {
 } else {
   Say "④ 저장소 다운로드 중... ($targetDir)" Cyan
   git clone --quiet $repoUrl $targetDir
+}
+if (-not (Test-Path (Join-Path $targetDir 'index.html'))) {
+  Say "   다운로드에 실패했어요. 인터넷/로그인 상태를 확인한 뒤 다시 실행해 주세요." Red
+  return
 }
 Say "   완료 ✓" Green
 
