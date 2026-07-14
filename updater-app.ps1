@@ -6,6 +6,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $indexPath = Join-Path $scriptDir 'index.html'
 
 $cheers = @('오늘도 최고예요 🍒', '멋진 작업이에요 ✨', '반짝반짝 ⭐', '수고했어요 🍈', '역시 MERO! 💚', '완벽해요 🎬')
+$taglines = @('✨ 반짝이는 포트폴리오 ✨', '🍈 메론빵 스튜디오 🍈', '🎬 이야기를 담는 영상 🎬', '💚 MERO STUDIO 💚', '⭐ 오늘도 반짝반짝 ⭐')
 
 # ---------- 핵심 로직 ----------
 function Read-VideosFromClipboard {
@@ -17,7 +18,6 @@ function Read-VideosFromClipboard {
   foreach ($v in $data) { if (-not $v.id -or -not $v.title) { throw "목록에 id/title이 없어요. '목록 내보내기'로 복사한 내용인지 확인해 주세요." } }
   return $data
 }
-
 function Write-Seed($data) {
   $lines = foreach ($v in $data) {
     $t = ([string]$v.title) -replace '\\', '\\' -replace '"', '\"'
@@ -35,17 +35,10 @@ function Write-Seed($data) {
 [xml]$xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MERO STUDIO" Height="700" Width="480"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
-        FontFamily="Malgun Gothic" AllowsTransparency="False">
-  <Window.Background>
-    <LinearGradientBrush StartPoint="0,0" EndPoint="0.4,1">
-      <GradientStop Color="#FFFDF6" Offset="0"/>
-      <GradientStop Color="#EAF7D6" Offset="0.55"/>
-      <GradientStop Color="#FDE8EE" Offset="1"/>
-    </LinearGradientBrush>
-  </Window.Background>
-
+        Title="MERO STUDIO" Width="480" Height="726"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        FontFamily="Malgun Gothic">
   <Window.Resources>
     <Style x:Key="Pill" TargetType="Button">
       <Setter Property="Foreground" Value="White"/>
@@ -56,34 +49,28 @@ function Write-Seed($data) {
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="Button">
-            <Border x:Name="bd" CornerRadius="28" BorderBrush="#3F7212" BorderThickness="3"
-                    RenderTransformOrigin="0.5,0.5">
+            <Border x:Name="bd" CornerRadius="28" BorderBrush="White" BorderThickness="2.5" RenderTransformOrigin="0.5,0.5">
               <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
               <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                  <GradientStop Color="#A8E063" Offset="0"/>
+                  <GradientStop Color="#FF8AD4" Offset="0"/>
+                  <GradientStop Color="#A8E063" Offset="0.5"/>
                   <GradientStop Color="#56AB2F" Offset="1"/>
                 </LinearGradientBrush>
               </Border.Background>
-              <Border.Effect><DropShadowEffect Color="#5A9622" BlurRadius="18" ShadowDepth="0" Opacity="0.6"/></Border.Effect>
+              <Border.Effect><DropShadowEffect Color="#8FD14F" BlurRadius="26" ShadowDepth="0" Opacity="0.85"/></Border.Effect>
               <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <ControlTemplate.Triggers>
-              <EventTrigger RoutedEvent="MouseEnter">
-                <BeginStoryboard><Storyboard>
-                  <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.15"/>
-                  <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.15"/>
-                </Storyboard></BeginStoryboard>
-              </EventTrigger>
-              <EventTrigger RoutedEvent="MouseLeave">
-                <BeginStoryboard><Storyboard>
-                  <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.15"/>
-                  <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.15"/>
-                </Storyboard></BeginStoryboard>
-              </EventTrigger>
-              <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="bd" Property="Opacity" Value="0.45"/>
-              </Trigger>
+              <EventTrigger RoutedEvent="MouseEnter"><BeginStoryboard><Storyboard>
+                <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1.06" Duration="0:0:0.15"/>
+                <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1.06" Duration="0:0:0.15"/>
+              </Storyboard></BeginStoryboard></EventTrigger>
+              <EventTrigger RoutedEvent="MouseLeave"><BeginStoryboard><Storyboard>
+                <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.15"/>
+                <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.15"/>
+              </Storyboard></BeginStoryboard></EventTrigger>
+              <Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Opacity" Value="0.4"/></Trigger>
             </ControlTemplate.Triggers>
           </ControlTemplate>
         </Setter.Value>
@@ -91,165 +78,182 @@ function Write-Seed($data) {
     </Style>
   </Window.Resources>
 
-  <Grid>
-    <Canvas x:Name="FxCanvas" IsHitTestVisible="False" Panel.ZIndex="5"/>
+  <Border x:Name="Root" Margin="18" CornerRadius="30" BorderBrush="#FFFFFF" BorderThickness="2">
+    <Border.Background>
+      <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+        <GradientStop x:Name="bgStop1" Color="#FFF6E9" Offset="0"/>
+        <GradientStop x:Name="bgStop2" Color="#E7F7CE" Offset="0.5"/>
+        <GradientStop x:Name="bgStop3" Color="#FDE3EE" Offset="1"/>
+      </LinearGradientBrush>
+    </Border.Background>
+    <Border.Effect><DropShadowEffect x:Name="glow" Color="#8FD14F" BlurRadius="30" ShadowDepth="0" Opacity="0.8"/></Border.Effect>
 
-    <!-- 떠다니는 반짝이 -->
-    <TextBlock Text="&#10022;" FontSize="18" Foreground="#BCE98A" Canvas.Left="0" Margin="40,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-      <TextBlock.RenderTransform><TranslateTransform/></TextBlock.RenderTransform>
-      <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="0" To="-20" Duration="0:0:2.2" AutoReverse="True" RepeatBehavior="Forever"/>
-        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.35" To="1" Duration="0:0:1.4" AutoReverse="True" RepeatBehavior="Forever"/>
-      </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
-    </TextBlock>
-    <TextBlock Text="&#9733;" FontSize="14" Foreground="#F6B8C8" Margin="0,90,52,0" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-      <TextBlock.RenderTransform><TranslateTransform/></TextBlock.RenderTransform>
-      <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="0" To="16" Duration="0:0:1.8" AutoReverse="True" RepeatBehavior="Forever"/>
-        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.4" To="1" Duration="0:0:1.1" AutoReverse="True" RepeatBehavior="Forever"/>
-      </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
-    </TextBlock>
-    <TextBlock Text="&#10022;" FontSize="13" Foreground="#8FD14F" Margin="70,0,0,120" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
-      <TextBlock.RenderTransform><TranslateTransform/></TextBlock.RenderTransform>
-      <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="0" To="-14" Duration="0:0:2.6" AutoReverse="True" RepeatBehavior="Forever"/>
-        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.3" To="0.9" Duration="0:0:1.6" AutoReverse="True" RepeatBehavior="Forever"/>
-      </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
-    </TextBlock>
+    <Grid>
+      <!-- 회전 후광 -->
+      <TextBlock Text="&#10022;" FontSize="230" Foreground="#33BCE98A" HorizontalAlignment="Center" VerticalAlignment="Top"
+                 Margin="0,-40,0,0" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+        <TextBlock.RenderTransform><RotateTransform x:Name="haloRot"/></TextBlock.RenderTransform>
+      </TextBlock>
 
-    <Grid Margin="26" Panel.ZIndex="10">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
+      <Canvas x:Name="FxCanvas" IsHitTestVisible="False" Panel.ZIndex="20" ClipToBounds="True"/>
 
-      <!-- 헤더: 흔들리는 메론 + 타이틀 -->
-      <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,6,0,4">
-        <TextBlock Text="&#127816;" FontSize="40" FontFamily="Segoe UI Emoji" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-          <TextBlock.RenderTransform><RotateTransform/></TextBlock.RenderTransform>
-          <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" From="-13" To="13" Duration="0:0:1.5" AutoReverse="True" RepeatBehavior="Forever"/>
-            <DoubleAnimation Storyboard.TargetProperty="FontSize" From="36" To="44" Duration="0:0:1.2" AutoReverse="True" RepeatBehavior="Forever"/>
-          </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
-        </TextBlock>
-        <TextBlock FontSize="27" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0">
-          <TextBlock.Foreground>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-              <GradientStop Color="#8FD14F" Offset="0"/>
-              <GradientStop Color="#56AB2F" Offset="0.5"/>
-              <GradientStop Color="#D63D3D" Offset="1"/>
-            </LinearGradientBrush>
-          </TextBlock.Foreground>
-          MERO STUDIO
-        </TextBlock>
-        <TextBlock Text="포폴 업데이트 콘솔  v2.0" FontSize="12" Foreground="#5A9622" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-      </StackPanel>
+      <Grid Margin="24,14,24,22" Panel.ZIndex="10">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-      <!-- 있어보이는 상태칩 -->
-      <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
-        <Border Background="#E6F7CF" CornerRadius="10" Padding="10,5" Margin="4,0">
-          <StackPanel Orientation="Horizontal">
-            <Ellipse Width="9" Height="9" Fill="#4CAF50" VerticalAlignment="Center" Margin="0,0,6,0">
-              <Ellipse.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.25" Duration="0:0:0.9" AutoReverse="True" RepeatBehavior="Forever"/>
-              </Storyboard></BeginStoryboard></EventTrigger></Ellipse.Triggers>
-            </Ellipse>
-            <TextBlock Text="ONLINE" FontSize="11" FontWeight="Bold" Foreground="#3F7212" VerticalAlignment="Center"/>
+        <!-- 드래그바 + 창 컨트롤 -->
+        <Grid x:Name="DragBar" Grid.Row="0" Background="Transparent" Height="26">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Border x:Name="BtnMin" Width="24" Height="24" CornerRadius="12" Background="#33FFFFFF" Margin="0,0,6,0" Cursor="Hand">
+              <TextBlock Text="&#8211;" FontSize="15" FontWeight="Bold" Foreground="#3F7212" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border x:Name="BtnClose" Width="24" Height="24" CornerRadius="12" Background="#33D63D3D" Cursor="Hand">
+              <TextBlock Text="&#10005;" FontSize="12" FontWeight="Bold" Foreground="#A82828" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </StackPanel>
+        </Grid>
+
+        <!-- 헤더 -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,2,0,4">
+          <TextBlock Text="&#127816;" FontSize="42" FontFamily="Segoe UI Emoji" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform><RotateTransform/></TextBlock.RenderTransform>
+            <TextBlock.Effect><DropShadowEffect Color="#8FD14F" BlurRadius="20" ShadowDepth="0" Opacity="0.9"/></TextBlock.Effect>
+            <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
+              <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" From="-14" To="14" Duration="0:0:1.4" AutoReverse="True" RepeatBehavior="Forever"/>
+              <DoubleAnimation Storyboard.TargetProperty="FontSize" From="38" To="47" Duration="0:0:1.1" AutoReverse="True" RepeatBehavior="Forever"/>
+            </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
+          </TextBlock>
+          <TextBlock FontSize="29" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0">
+            <TextBlock.Effect><DropShadowEffect Color="#FFB3D9" BlurRadius="14" ShadowDepth="0" Opacity="0.6"/></TextBlock.Effect>
+            <TextBlock.Foreground>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                <GradientStop x:Name="tStop1" Color="#8FD14F" Offset="0"/>
+                <GradientStop x:Name="tStop2" Color="#FF6EC7" Offset="0.5"/>
+                <GradientStop x:Name="tStop3" Color="#56AB2F" Offset="1"/>
+              </LinearGradientBrush>
+            </TextBlock.Foreground>
+            MERO STUDIO
+          </TextBlock>
+          <TextBlock x:Name="LblTagline" Text="✨ 반짝이는 포트폴리오 ✨" FontSize="12.5" Foreground="#7A9C3E" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- 상태칩 -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,10">
+          <Border Background="#CCE6F7CF" CornerRadius="10" Padding="10,5" Margin="4,0">
+            <StackPanel Orientation="Horizontal">
+              <Ellipse Width="9" Height="9" Fill="#4CAF50" VerticalAlignment="Center" Margin="0,0,6,0">
+                <Ellipse.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
+                  <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.2" Duration="0:0:0.8" AutoReverse="True" RepeatBehavior="Forever"/>
+                </Storyboard></BeginStoryboard></EventTrigger></Ellipse.Triggers>
+              </Ellipse>
+              <TextBlock Text="ONLINE" FontSize="11" FontWeight="Bold" Foreground="#3F7212" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+          <Border Background="#CCFDE8EE" CornerRadius="10" Padding="10,5" Margin="4,0">
+            <TextBlock x:Name="LblClock" Text="00:00:00" FontSize="11" FontWeight="Bold" Foreground="#B03A52"/>
+          </Border>
+          <Border Background="#CCE6F7CF" CornerRadius="10" Padding="10,5" Margin="4,0">
+            <TextBlock x:Name="LblCount" Text="READY" FontSize="11" FontWeight="Bold" Foreground="#3F7212"/>
+          </Border>
+        </StackPanel>
+
+        <!-- 안내 -->
+        <Border Grid.Row="3" Background="#CCE6F7CF" CornerRadius="14" Padding="16,12" Margin="0,0,0,12">
+          <Border.Effect><DropShadowEffect Color="#BCE98A" BlurRadius="14" ShadowDepth="0" Opacity="0.7"/></Border.Effect>
+          <StackPanel>
+            <TextBlock Text="&#9312;  사이트 편집 모드에서 '목록 내보내기' 클릭" Foreground="#3F7212" FontSize="13"/>
+            <TextBlock Text="&#9313;  아래 반짝이는 버튼 클릭!" Foreground="#3F7212" FontSize="13" Margin="0,5,0,0"/>
           </StackPanel>
         </Border>
-        <Border Background="#FDE8EE" CornerRadius="10" Padding="10,5" Margin="4,0">
-          <TextBlock x:Name="LblClock" Text="00:00:00" FontSize="11" FontWeight="Bold" Foreground="#B03A52"/>
-        </Border>
-        <Border Background="#E6F7CF" CornerRadius="10" Padding="10,5" Margin="4,0">
-          <TextBlock x:Name="LblCount" Text="READY" FontSize="11" FontWeight="Bold" Foreground="#3F7212"/>
-        </Border>
-      </StackPanel>
 
-      <!-- 안내 -->
-      <Border Grid.Row="2" Background="#E6F7CF" CornerRadius="14" Padding="16,12" Margin="0,0,0,12">
-        <Border.Effect><DropShadowEffect Color="#BCE98A" BlurRadius="14" ShadowDepth="0" Opacity="0.7"/></Border.Effect>
-        <StackPanel>
-          <TextBlock Text="&#9312;  사이트 편집 모드에서 '목록 내보내기' 클릭" Foreground="#3F7212" FontSize="13"/>
-          <TextBlock Text="&#9313;  아래 반짝이는 버튼 클릭!" Foreground="#3F7212" FontSize="13" Margin="0,5,0,0"/>
+        <!-- 목록 -->
+        <Border Grid.Row="4" Background="#F2FFFFFF" BorderThickness="3" CornerRadius="16" Padding="6" Margin="0,0,0,12">
+          <Border.BorderBrush><SolidColorBrush x:Name="cardBrush" Color="#BCE98A"/></Border.BorderBrush>
+          <Border.Effect><DropShadowEffect Color="#8FD14F" BlurRadius="16" ShadowDepth="0" Opacity="0.4"/></Border.Effect>
+          <ListBox x:Name="LstVideos" BorderThickness="0" Background="Transparent" FontSize="12.5" Foreground="#3A4A2A" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+        </Border>
+
+        <!-- 진행바 -->
+        <ProgressBar Grid.Row="5" x:Name="Bar" Height="10" IsIndeterminate="True" Visibility="Collapsed" Foreground="#56AB2F" Background="#E6F7CF" BorderThickness="0" Margin="0,0,0,10"/>
+
+        <!-- 버튼 -->
+        <Button Grid.Row="6" x:Name="BtnUpdate" Style="{StaticResource Pill}" Content="&#128203;  불러와서 업데이트  &#10022;"/>
+
+        <!-- 상태 + 푸터 -->
+        <StackPanel Grid.Row="7" Margin="0,12,0,0">
+          <TextBlock x:Name="LblStatus" Text="목록을 복사한 뒤 버튼을 눌러주세요 🍈" FontSize="13" Foreground="#5A9622" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+          <TextBlock Text="🍒 made with love by MERO" FontSize="11" Foreground="#C58AA0" HorizontalAlignment="Center" Margin="0,8,0,0">
+            <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
+              <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.45" To="1" Duration="0:0:1.5" AutoReverse="True" RepeatBehavior="Forever"/>
+            </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
+          </TextBlock>
         </StackPanel>
-      </Border>
-
-      <!-- 목록 -->
-      <Border Grid.Row="3" Background="#FFFFFF" BorderBrush="#BCE98A" BorderThickness="3" CornerRadius="16" Padding="6" Margin="0,0,0,12">
-        <Border.Effect><DropShadowEffect Color="#8FD14F" BlurRadius="16" ShadowDepth="0" Opacity="0.35"/></Border.Effect>
-        <ListBox x:Name="LstVideos" BorderThickness="0" Background="Transparent"
-                 FontSize="12.5" Foreground="#3A4A2A" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-      </Border>
-
-      <!-- 진행바 -->
-      <ProgressBar Grid.Row="4" x:Name="Bar" Height="10" IsIndeterminate="True" Visibility="Collapsed"
-                   Foreground="#56AB2F" Background="#E6F7CF" BorderThickness="0" Margin="0,0,0,10"/>
-
-      <!-- 버튼 -->
-      <Button Grid.Row="5" x:Name="BtnUpdate" Style="{StaticResource Pill}" Content="&#128203;  불러와서 업데이트  &#10022;"/>
-
-      <!-- 상태 + 푸터 -->
-      <StackPanel Grid.Row="6" Margin="0,12,0,0">
-        <TextBlock x:Name="LblStatus" Text="목록을 복사한 뒤 버튼을 눌러주세요 🍈"
-                   FontSize="13" Foreground="#5A9622" HorizontalAlignment="Center"
-                   TextAlignment="Center" TextWrapping="Wrap"/>
-        <TextBlock Text="🍒 made with love by MERO" FontSize="11" Foreground="#C58AA0"
-                   HorizontalAlignment="Center" Margin="0,8,0,0">
-          <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.5" To="1" Duration="0:0:1.5" AutoReverse="True" RepeatBehavior="Forever"/>
-          </Storyboard></BeginStoryboard></EventTrigger></TextBlock.Triggers>
-        </TextBlock>
-      </StackPanel>
+      </Grid>
     </Grid>
-  </Grid>
+  </Border>
 </Window>
 "@
 
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
-$BtnUpdate = $window.FindName('BtnUpdate')
-$LstVideos = $window.FindName('LstVideos')
-$LblStatus = $window.FindName('LblStatus')
-$LblClock = $window.FindName('LblClock')
-$LblCount = $window.FindName('LblCount')
-$Bar = $window.FindName('Bar')
-$FxCanvas = $window.FindName('FxCanvas')
+foreach ($n in 'Root', 'glow', 'bgStop1', 'bgStop2', 'bgStop3', 'tStop1', 'tStop2', 'tStop3', 'haloRot', 'cardBrush', 'FxCanvas', 'DragBar', 'BtnMin', 'BtnClose', 'BtnUpdate', 'LstVideos', 'LblStatus', 'LblClock', 'LblCount', 'LblTagline', 'Bar') {
+  Set-Variable -Name $n -Value $window.FindName($n)
+}
 
+# ---------- 애니메이션 헬퍼 ----------
+function Col($hex) { [System.Windows.Media.Color]([System.Windows.Media.ColorConverter]::ConvertFromString($hex)) }
+function Cycle-Color($obj, $dp, $hexes, $secs) {
+  $anim = New-Object System.Windows.Media.Animation.ColorAnimationUsingKeyFrames
+  $anim.Duration = [TimeSpan]::FromSeconds($secs)
+  $anim.RepeatBehavior = [System.Windows.Media.Animation.RepeatBehavior]::Forever
+  $n = $hexes.Count
+  for ($i = 0; $i -lt $n; $i++) {
+    $kt = [System.Windows.Media.Animation.KeyTime]::FromTimeSpan([TimeSpan]::FromSeconds($secs * $i / ($n - 1)))
+    [void]$anim.KeyFrames.Add((New-Object System.Windows.Media.Animation.LinearColorKeyFrame ((Col $hexes[$i]), $kt)))
+  }
+  $obj.BeginAnimation($dp, $anim)
+}
+function Pulse-Double($obj, $dp, $from, $to, $secs) {
+  $a = New-Object System.Windows.Media.Animation.DoubleAnimation ($from, $to, [TimeSpan]::FromSeconds($secs))
+  $a.AutoReverse = $true; $a.RepeatBehavior = [System.Windows.Media.Animation.RepeatBehavior]::Forever
+  $obj.BeginAnimation($dp, $a)
+}
 function Set-Status($text, $hex) {
   $LblStatus.Text = $text
-  $LblStatus.Foreground = New-Object System.Windows.Media.SolidColorBrush ([System.Windows.Media.ColorConverter]::ConvertFromString($hex))
+  $LblStatus.Foreground = New-Object System.Windows.Media.SolidColorBrush (Col $hex)
   $null = $LblStatus.Dispatcher.Invoke([action] {}, [System.Windows.Threading.DispatcherPriority]::Render)
 }
 
-function Start-Confetti {
-  $emojis = "🍈", "🍒", "✦", "⭐", "💚", "✨"
-  $rand = New-Object System.Random
-  for ($i = 0; $i -lt 46; $i++) {
-    $tb = New-Object System.Windows.Controls.TextBlock
-    $tb.Text = $emojis[$rand.Next($emojis.Count)]
-    $tb.FontFamily = New-Object System.Windows.Media.FontFamily("Segoe UI Emoji")
-    $tb.FontSize = 16 + $rand.Next(24)
-    [System.Windows.Controls.Canvas]::SetLeft($tb, $rand.Next(450))
-    [System.Windows.Controls.Canvas]::SetTop($tb, -40)
-    $rot = New-Object System.Windows.Media.RotateTransform
-    $tb.RenderTransform = $rot
-    [void]$FxCanvas.Children.Add($tb)
-    $dur = [TimeSpan]::FromMilliseconds(1900 + $rand.Next(1800))
-    $begin = [TimeSpan]::FromMilliseconds($rand.Next(1000))
-    $fall = New-Object System.Windows.Media.Animation.DoubleAnimation(-40, 760, $dur)
-    $fall.BeginTime = $begin
-    $spin = New-Object System.Windows.Media.Animation.DoubleAnimation(0, (360 * ($rand.Next(3) + 1)), $dur)
-    $spin.BeginTime = $begin
-    $fall.Add_Completed({ $FxCanvas.Children.Remove($tb) }.GetNewClosure())
-    $tb.BeginAnimation([System.Windows.Controls.Canvas]::TopProperty, $fall)
-    $rot.BeginAnimation([System.Windows.Media.RotateTransform]::AngleProperty, $spin)
-  }
+$emojis = "🍈", "🍒", "✦", "⭐", "💚", "✨", "🌟", "🍬"
+$rand = New-Object System.Random
+function Spawn-Particle($big) {
+  $tb = New-Object System.Windows.Controls.TextBlock
+  $tb.Text = $emojis[$rand.Next($emojis.Count)]
+  $tb.FontFamily = New-Object System.Windows.Media.FontFamily("Segoe UI Emoji")
+  $tb.FontSize = $(if ($big) { 16 + $rand.Next(24) } else { 11 + $rand.Next(12) })
+  $tb.Opacity = $(if ($big) { 1 } else { 0.7 })
+  [System.Windows.Controls.Canvas]::SetLeft($tb, $rand.Next(430))
+  [System.Windows.Controls.Canvas]::SetTop($tb, -40)
+  $rot = New-Object System.Windows.Media.RotateTransform
+  $tb.RenderTransform = $rot
+  [void]$FxCanvas.Children.Add($tb)
+  $dur = [TimeSpan]::FromMilliseconds($(if ($big) { 1900 + $rand.Next(1700) } else { 3500 + $rand.Next(2500) }))
+  $begin = [TimeSpan]::FromMilliseconds($(if ($big) { $rand.Next(1000) } else { 0 }))
+  $fall = New-Object System.Windows.Media.Animation.DoubleAnimation (-40, 720, $dur); $fall.BeginTime = $begin
+  $spin = New-Object System.Windows.Media.Animation.DoubleAnimation (0, (360 * ($rand.Next(3) + 1)), $dur); $spin.BeginTime = $begin
+  $fall.Add_Completed({ $FxCanvas.Children.Remove($tb) }.GetNewClosure())
+  $tb.BeginAnimation([System.Windows.Controls.Canvas]::TopProperty, $fall)
+  $rot.BeginAnimation([System.Windows.Media.RotateTransform]::AngleProperty, $spin)
 }
+function Start-Confetti { for ($i = 0; $i -lt 50; $i++) { Spawn-Particle $true } }
 
 $BtnUpdate.Add_Click({
     $BtnUpdate.IsEnabled = $false
@@ -266,7 +270,6 @@ $BtnUpdate.Add_Click({
       $script:count = $data.Count
       Set-Status "업로드 중... 잠시만요 🚀" "#5A9622"
       $Bar.Visibility = 'Visible'
-
       $script:ps = [PowerShell]::Create()
       [void]$script:ps.AddScript({
           param($dir, $count)
@@ -279,7 +282,6 @@ $BtnUpdate.Add_Click({
           return "OK"
         }).AddParameter('dir', $scriptDir).AddParameter('count', $script:count)
       $script:handle = $script:ps.BeginInvoke()
-
       $script:timer = New-Object System.Windows.Threading.DispatcherTimer
       $script:timer.Interval = [TimeSpan]::FromMilliseconds(200)
       $script:timer.Add_Tick({
@@ -289,31 +291,71 @@ $BtnUpdate.Add_Click({
           $script:ps.Dispose()
           $Bar.Visibility = 'Collapsed'
           if ($res -like 'OK*') {
-            $cheer = $cheers[(New-Object System.Random).Next($cheers.Count)]
+            $cheer = $cheers[$rand.Next($cheers.Count)]
             Set-Status ("✓ 완료! 영상 {0}개 · {1}`n1~2분 뒤 사이트에 반영돼요" -f $script:count, $cheer) "#3F7212"
             Start-Confetti
             try { [System.Media.SystemSounds]::Asterisk.Play() } catch {}
-          }
-          else {
+          } else {
             Set-Status ("⚠ " + ($res -replace '^FAIL:', '')) "#D63D3D"
           }
           $BtnUpdate.IsEnabled = $true
         })
       $script:timer.Start()
-    }
-    catch {
+    } catch {
       $Bar.Visibility = 'Collapsed'
       Set-Status ("⚠ " + $_.Exception.Message) "#D63D3D"
       $BtnUpdate.IsEnabled = $true
     }
   })
 
+# 창 컨트롤
+$DragBar.Add_MouseLeftButtonDown({ try { $window.DragMove() } catch {} })
+$BtnClose.Add_MouseLeftButtonUp({ $window.Close() })
+$BtnMin.Add_MouseLeftButtonUp({ $window.WindowState = 'Minimized' })
+
 if ($SelfTest) { Write-Output "SELFTEST_OK"; return }
 
+# ---------- 미친듯한 상시 애니메이션 시작 ----------
+Cycle-Color $bgStop1 ([System.Windows.Media.GradientStop]::ColorProperty) @('#FFF6E9', '#E7F7CE', '#FDE3EE', '#E9F0FF', '#FFF6E9') 14
+Cycle-Color $bgStop2 ([System.Windows.Media.GradientStop]::ColorProperty) @('#E7F7CE', '#FDE3EE', '#E9F0FF', '#FFF6E9', '#E7F7CE') 14
+Cycle-Color $bgStop3 ([System.Windows.Media.GradientStop]::ColorProperty) @('#FDE3EE', '#E9F0FF', '#FFF6E9', '#E7F7CE', '#FDE3EE') 14
+Cycle-Color $glow ([System.Windows.Media.Effects.DropShadowEffect]::ColorProperty) @('#8FD14F', '#FF8AD4', '#7AC7FF', '#FFD86E', '#8FD14F') 10
+Pulse-Double $glow ([System.Windows.Media.Effects.DropShadowEffect]::BlurRadiusProperty) 24 42 2.2
+Cycle-Color $cardBrush ([System.Windows.Media.SolidColorBrush]::ColorProperty) @('#BCE98A', '#FFB3D9', '#9FD8FF', '#FFE08A', '#BCE98A') 8
+Cycle-Color $tStop2 ([System.Windows.Media.GradientStop]::ColorProperty) @('#FF6EC7', '#FFD86E', '#7AC7FF', '#FF6EC7') 6
+
+# 후광 회전
+$haloAnim = New-Object System.Windows.Media.Animation.DoubleAnimation (0, 360, [TimeSpan]::FromSeconds(22))
+$haloAnim.RepeatBehavior = [System.Windows.Media.Animation.RepeatBehavior]::Forever
+$haloRot.BeginAnimation([System.Windows.Media.RotateTransform]::AngleProperty, $haloAnim)
+
+# 상시 반짝이 낙하
+$fxTimer = New-Object System.Windows.Threading.DispatcherTimer
+$fxTimer.Interval = [TimeSpan]::FromMilliseconds(420)
+$fxTimer.Add_Tick({ Spawn-Particle $false })
+$fxTimer.Start()
+
+# 실시간 시계
 $clockTimer = New-Object System.Windows.Threading.DispatcherTimer
 $clockTimer.Interval = [TimeSpan]::FromSeconds(1)
 $clockTimer.Add_Tick({ $LblClock.Text = (Get-Date).ToString('HH:mm:ss') })
 $clockTimer.Start()
 $LblClock.Text = (Get-Date).ToString('HH:mm:ss')
+
+# 문구 교체
+$script:tagi = 0
+$tagTimer = New-Object System.Windows.Threading.DispatcherTimer
+$tagTimer.Interval = [TimeSpan]::FromSeconds(3)
+$tagTimer.Add_Tick({
+    $fadeOut = New-Object System.Windows.Media.Animation.DoubleAnimation (1, 0, [TimeSpan]::FromSeconds(0.4))
+    $fadeOut.Add_Completed({
+        $script:tagi = ($script:tagi + 1) % $taglines.Count
+        $LblTagline.Text = $taglines[$script:tagi]
+        $fin = New-Object System.Windows.Media.Animation.DoubleAnimation (0, 1, [TimeSpan]::FromSeconds(0.4))
+        $LblTagline.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $fin)
+      })
+    $LblTagline.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $fadeOut)
+  })
+$tagTimer.Start()
 
 [void]$window.ShowDialog()
