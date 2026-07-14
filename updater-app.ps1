@@ -76,6 +76,34 @@ function Write-Seed($data) {
         </Setter.Value>
       </Setter>
     </Style>
+    <Style x:Key="MiniPill" TargetType="Button">
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontSize" Value="13.5"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Height" Value="44"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="mb" CornerRadius="22" Background="{TemplateBinding Background}" BorderBrush="White" BorderThickness="2" RenderTransformOrigin="0.5,0.5">
+              <Border.RenderTransform><ScaleTransform x:Name="ms" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
+              <Border.Effect><DropShadowEffect Color="#66000000" BlurRadius="12" ShadowDepth="0" Opacity="0.4"/></Border.Effect>
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <EventTrigger RoutedEvent="MouseEnter"><BeginStoryboard><Storyboard>
+                <DoubleAnimation Storyboard.TargetName="ms" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.12"/>
+                <DoubleAnimation Storyboard.TargetName="ms" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.12"/>
+              </Storyboard></BeginStoryboard></EventTrigger>
+              <EventTrigger RoutedEvent="MouseLeave"><BeginStoryboard><Storyboard>
+                <DoubleAnimation Storyboard.TargetName="ms" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.12"/>
+                <DoubleAnimation Storyboard.TargetName="ms" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.12"/>
+              </Storyboard></BeginStoryboard></EventTrigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
   </Window.Resources>
 
   <Border x:Name="Root" Margin="18" CornerRadius="30" BorderBrush="#FFFFFF" BorderThickness="2">
@@ -95,7 +123,7 @@ function Write-Seed($data) {
         <TextBlock.RenderTransform><RotateTransform x:Name="haloRot"/></TextBlock.RenderTransform>
       </TextBlock>
 
-      <Canvas x:Name="FxCanvas" IsHitTestVisible="False" Panel.ZIndex="20" ClipToBounds="True"/>
+      <Canvas x:Name="FxCanvas" Panel.ZIndex="20" ClipToBounds="True"/>
 
       <Grid Margin="24,14,24,22" Panel.ZIndex="10">
         <Grid.RowDefinitions>
@@ -104,6 +132,7 @@ function Write-Seed($data) {
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
@@ -163,6 +192,9 @@ function Write-Seed($data) {
           <Border Background="#CCE6F7CF" CornerRadius="10" Padding="10,5" Margin="4,0">
             <TextBlock x:Name="LblCount" Text="READY" FontSize="11" FontWeight="Bold" Foreground="#3F7212"/>
           </Border>
+          <Border Background="#CCFDE8EE" CornerRadius="10" Padding="10,5" Margin="4,0" Cursor="Hand" ToolTip="떨어지는 반짝이를 클릭해 터뜨려 보세요!">
+            <TextBlock x:Name="LblScore" Text="✨ 0" FontSize="11" FontWeight="Bold" Foreground="#B06AB3"/>
+          </Border>
         </StackPanel>
 
         <!-- 안내 -->
@@ -187,8 +219,31 @@ function Write-Seed($data) {
         <!-- 버튼 -->
         <Button Grid.Row="6" x:Name="BtnUpdate" Style="{StaticResource Pill}" Content="&#128203;  불러와서 업데이트  &#10022;"/>
 
+        <!-- 보조 버튼: 사이트 열기 / 오늘의 운세 -->
+        <Grid Grid.Row="7" Margin="0,10,0,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Button x:Name="BtnSite" Grid.Column="0" Style="{StaticResource MiniPill}" Content="🌐 사이트 열기">
+            <Button.Background>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#7AC7FF" Offset="0"/><GradientStop Color="#4A90E2" Offset="1"/>
+              </LinearGradientBrush>
+            </Button.Background>
+          </Button>
+          <Button x:Name="BtnLuck" Grid.Column="2" Style="{StaticResource MiniPill}" Content="🔮 오늘의 운세">
+            <Button.Background>
+              <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FF9FD6" Offset="0"/><GradientStop Color="#B06AB3" Offset="1"/>
+              </LinearGradientBrush>
+            </Button.Background>
+          </Button>
+        </Grid>
+
         <!-- 상태 + 푸터 -->
-        <StackPanel Grid.Row="7" Margin="0,12,0,0">
+        <StackPanel Grid.Row="8" Margin="0,12,0,0">
           <TextBlock x:Name="LblStatus" Text="목록을 복사한 뒤 버튼을 눌러주세요 🍈" FontSize="13" Foreground="#5A9622" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
           <TextBlock Text="🍒 made with love by MERO" FontSize="11" Foreground="#C58AA0" HorizontalAlignment="Center" Margin="0,8,0,0">
             <TextBlock.Triggers><EventTrigger RoutedEvent="Loaded"><BeginStoryboard><Storyboard>
@@ -204,9 +259,22 @@ function Write-Seed($data) {
 
 $reader = New-Object System.Xml.XmlNodeReader $xaml
 $window = [Windows.Markup.XamlReader]::Load($reader)
-foreach ($n in 'Root', 'glow', 'bgStop1', 'bgStop2', 'bgStop3', 'tStop1', 'tStop2', 'tStop3', 'haloRot', 'cardBrush', 'FxCanvas', 'DragBar', 'BtnMin', 'BtnClose', 'BtnUpdate', 'LstVideos', 'LblStatus', 'LblClock', 'LblCount', 'LblTagline', 'Bar') {
+foreach ($n in 'Root', 'glow', 'bgStop1', 'bgStop2', 'bgStop3', 'tStop1', 'tStop2', 'tStop3', 'haloRot', 'cardBrush', 'FxCanvas', 'DragBar', 'BtnMin', 'BtnClose', 'BtnUpdate', 'BtnSite', 'BtnLuck', 'LstVideos', 'LblStatus', 'LblClock', 'LblCount', 'LblScore', 'LblTagline', 'Bar') {
   Set-Variable -Name $n -Value $window.FindName($n)
 }
+$script:score = 0
+$fortunes = @(
+  '🍀 오늘은 렌더링이 한 번에 될 거예요',
+  '✨ 좋은 레퍼런스를 발견할 예감',
+  '🎬 컷 편집이 술술 풀리는 날',
+  '☕ 커피 한 잔의 여유를 챙기세요',
+  '💚 구독자가 늘어날 조짐이 보여요!',
+  '🌙 무리하지 말고 오늘은 일찍 자요',
+  '🔥 오늘의 작업물은 역대급이 될 거예요',
+  '🍈 메론빵이 행운을 가져다줄 거예요',
+  '⭐ 예상치 못한 좋은 소식이 찾아와요',
+  '🎧 인생 노래를 만나는 날이에요'
+)
 
 # ---------- 애니메이션 헬퍼 ----------
 function Col($hex) { [System.Windows.Media.Color]([System.Windows.Media.ColorConverter]::ConvertFromString($hex)) }
@@ -245,6 +313,13 @@ function Spawn-Particle($big) {
   $rot = New-Object System.Windows.Media.RotateTransform
   $tb.RenderTransform = $rot
   [void]$FxCanvas.Children.Add($tb)
+  $tb.Cursor = [System.Windows.Input.Cursors]::Hand
+  $tb.Add_MouseLeftButtonDown({
+      $script:score++
+      $LblScore.Text = "✨ $($script:score)"
+      $FxCanvas.Children.Remove($tb)
+      try { [System.Media.SystemSounds]::Hand.Play() } catch {}
+    }.GetNewClosure())
   $dur = [TimeSpan]::FromMilliseconds($(if ($big) { 1900 + $rand.Next(1700) } else { 3500 + $rand.Next(2500) }))
   $begin = [TimeSpan]::FromMilliseconds($(if ($big) { $rand.Next(1000) } else { 0 }))
   $fall = New-Object System.Windows.Media.Animation.DoubleAnimation (-40, 720, $dur); $fall.BeginTime = $begin
@@ -312,6 +387,15 @@ $BtnUpdate.Add_Click({
 $DragBar.Add_MouseLeftButtonDown({ try { $window.DragMove() } catch {} })
 $BtnClose.Add_MouseLeftButtonUp({ $window.Close() })
 $BtnMin.Add_MouseLeftButtonUp({ $window.WindowState = 'Minimized' })
+
+# 사이트 열기 / 오늘의 운세
+$BtnSite.Add_Click({ Start-Process 'https://m3ro33.github.io/mero-mv/' })
+$BtnLuck.Add_Click({
+    $f = $fortunes[$rand.Next($fortunes.Count)]
+    Set-Status $f "#8E44AD"
+    for ($i = 0; $i -lt 16; $i++) { Spawn-Particle $true }
+    try { [System.Media.SystemSounds]::Exclamation.Play() } catch {}
+  })
 
 if ($SelfTest) { Write-Output "SELFTEST_OK"; return }
 
