@@ -83,7 +83,8 @@ if ($CheckOnly) {
 if (Test-Path (Join-Path $targetDir '.git')) {
   Say "④ 저장소 최신화 중..." Cyan
   Push-Location $targetDir
-  git pull --rebase --quiet
+  git fetch origin 2>&1 | Out-Null
+  git reset --hard origin/main 2>&1 | Out-Null
   Pop-Location
 } else {
   Say "④ 저장소 다운로드 중... ($targetDir)" Cyan
