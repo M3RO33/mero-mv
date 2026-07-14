@@ -384,11 +384,16 @@ $BtnUpdate.Add_Click({
       [void]$script:ps.AddScript({
           param($dir, $count)
           Set-Location $dir
+          # 갓 clone한 저장소엔 git 신원이 없어서 commit이 조용히 실패함 → 없으면 자동 설정
+          if (-not (git config user.email)) {
+            git config user.email "m3ro3333@gmail.com"
+            git config user.name  "MERO"
+          }
           & git add index.html 2>&1 | Out-Null
           & git commit -q -m "Update video list ($count videos)" 2>&1 | Out-Null
-          & git pull --rebase --quiet 2>&1 | Out-Null
-          $out = & git push --quiet 2>&1
-          if ($LASTEXITCODE -ne 0) { return ("FAIL:" + ($out -join ' ')) }
+          & git pull --rebase 2>&1 | Out-Null
+          $out = & git push 2>&1
+          if ($LASTEXITCODE -ne 0) { return ("FAIL:" + (($out | Out-String).Trim())) }
           return "OK"
         }).AddParameter('dir', $scriptDir).AddParameter('count', $script:count)
       $script:handle = $script:ps.BeginInvoke()
