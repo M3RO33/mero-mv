@@ -264,16 +264,50 @@ foreach ($n in 'Root', 'glow', 'bgStop1', 'bgStop2', 'bgStop3', 'tStop1', 'tStop
 }
 $script:score = 0
 $fortunes = @(
-  '🍀 오늘은 렌더링이 한 번에 될 거예요',
-  '✨ 좋은 레퍼런스를 발견할 예감',
-  '🎬 컷 편집이 술술 풀리는 날',
-  '☕ 커피 한 잔의 여유를 챙기세요',
-  '💚 구독자가 늘어날 조짐이 보여요!',
-  '🌙 무리하지 말고 오늘은 일찍 자요',
-  '🔥 오늘의 작업물은 역대급이 될 거예요',
+  '🍀 뜻밖의 행운이 찾아오는 날이에요',
+  '🌈 오래 기다린 소식이 곧 도착해요',
+  '💰 작은 지출은 나중에 큰 이득으로 돌아와요',
+  '🤝 오늘 만나는 사람 중에 귀인이 있어요',
+  '📈 노력한 만큼 결과가 따라오는 하루',
+  '🌟 자신감을 가지면 일이 술술 풀려요',
+  '🕊️ 마음의 여유가 행운을 부릅니다',
+  '🎁 예상치 못한 선물이 기다리고 있어요',
+  '☀️ 흐렸던 일이 맑게 개는 날이에요',
+  '🧭 망설이던 결정에 좋은 답이 나와요',
+  '💌 반가운 연락이 올 거예요',
+  '🌱 새로 시작하기 딱 좋은 날이에요',
+  '🔑 닫혀 있던 기회의 문이 열려요',
+  '🍯 달콤한 보상이 기다리는 하루',
+  '🪄 작은 기적이 일어날지도 몰라요',
+  '🎯 목표에 한 걸음 더 가까워져요',
+  '🌸 인간관계에서 좋은 일이 생겨요',
+  '⚖️ 미뤄둔 일을 정리하기 좋은 날이에요',
+  '🛡️ 어려움이 와도 잘 이겨낼 거예요',
+  '🎂 가까운 날에 축하할 일이 생겨요',
+  '🔮 직감을 믿으면 좋은 선택을 하게 돼요',
+  '🌊 흐름을 타면 순조롭게 풀리는 하루',
+  '🧩 고민하던 문제의 실마리가 보여요',
+  '💎 당신의 진가를 알아봐 주는 사람이 있어요',
+  '🌻 긍정적인 마음이 좋은 기운을 불러와요',
+  '🎈 오늘은 작은 일에도 기분 좋은 날',
+  '🌙 무리하지 말고 오늘은 푹 쉬어요',
+  '💧 물 한 잔의 여유를 잊지 마세요',
+  '🧘 조급함을 내려놓으면 길이 보여요',
+  '🍵 잠깐의 휴식이 큰 힘이 돼요',
+  '🚶 가벼운 산책이 영감을 줄 거예요',
+  '📵 가끔은 화면에서 눈을 떼어 쉬어주세요',
+  '🎬 컷 편집이 술술 풀리는 날이에요',
   '🍈 메론빵이 행운을 가져다줄 거예요',
-  '⭐ 예상치 못한 좋은 소식이 찾아와요',
-  '🎧 인생 노래를 만나는 날이에요'
+  '✨ 좋은 레퍼런스를 발견할 예감이에요',
+  '🎧 인생 노래를 만나는 날이에요',
+  '🖥️ 오늘은 렌더링이 한 번에 될 거예요',
+  '💚 구독자가 늘어날 조짐이 보여요!',
+  '🔥 오늘의 작업물은 역대급이 될 거예요',
+  '🎨 색감이 유난히 잘 뽑히는 하루',
+  '💾 저장은 자주! 오늘은 특히 조심하세요',
+  '🏆 당신의 영상이 누군가의 하루를 밝혀요',
+  '⏳ 마감이 생각보다 여유로울 거예요',
+  '🌟 오래 준비한 작업이 빛을 볼 때예요'
 )
 
 # ---------- 애니메이션 헬퍼 ----------
@@ -317,9 +351,10 @@ function Spawn-Particle($big) {
   $tb.Add_MouseLeftButtonDown({
       $script:score++
       $LblScore.Text = "✨ $($script:score)"
-      $FxCanvas.Children.Remove($tb)
+      $FxCanvas.Children.Remove($args[0])
+      $args[1].Handled = $true
       try { [System.Media.SystemSounds]::Hand.Play() } catch {}
-    }.GetNewClosure())
+    })
   $dur = [TimeSpan]::FromMilliseconds($(if ($big) { 1900 + $rand.Next(1700) } else { 3500 + $rand.Next(2500) }))
   $begin = [TimeSpan]::FromMilliseconds($(if ($big) { $rand.Next(1000) } else { 0 }))
   $fall = New-Object System.Windows.Media.Animation.DoubleAnimation (-40, 720, $dur); $fall.BeginTime = $begin
@@ -385,8 +420,8 @@ $BtnUpdate.Add_Click({
 
 # 창 컨트롤
 $DragBar.Add_MouseLeftButtonDown({ try { $window.DragMove() } catch {} })
-$BtnClose.Add_MouseLeftButtonUp({ $window.Close() })
-$BtnMin.Add_MouseLeftButtonUp({ $window.WindowState = 'Minimized' })
+$BtnClose.Add_MouseLeftButtonDown({ $args[1].Handled = $true; $window.Close() })
+$BtnMin.Add_MouseLeftButtonDown({ $args[1].Handled = $true; $window.WindowState = 'Minimized' })
 
 # 사이트 열기 / 오늘의 운세
 $BtnSite.Add_Click({ Start-Process 'https://m3ro33.github.io/mero-mv/' })
