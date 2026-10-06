@@ -23,7 +23,7 @@
 <meta name="twitter:image" content="https://m3ro33.github.io/mero-mv/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Jua&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Jua&family=Mochiy+Pop+One&family=Noto+Sans+JP:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --green-900:#3f7212;
@@ -442,8 +442,11 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
   .contact-card{width:100%}
 }
 </style>
+<link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
+
+<a class="skip-link" href="#works" data-i18n="skip_link">작업물로 바로 가기</a>
 
 <div class="bg-deco" id="bgDeco"></div>
 
@@ -457,7 +460,7 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
         <span class="brand-name">MERO</span>
       </span>
     </a>
-    <nav>
+    <nav aria-label="Main navigation">
       <a class="nav-link" href="#works" data-i18n="nav_works">작업물</a>
       <a class="nav-link" href="#contact" data-i18n="nav_contact">연락처</a>
       <button class="share-btn" id="shareBtn" type="button" aria-label="share" title="share">
@@ -468,8 +471,8 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
       </button>
       <div class="lang-toggle" id="langToggle" data-lang="ko" role="group" aria-label="language">
         <div class="lang-pill"></div>
-        <button id="btnKo" class="active" type="button">KR</button>
-        <button id="btnJa" type="button">JP</button>
+        <button id="btnKo" class="active" type="button" aria-label="한국어" aria-pressed="true">KR</button>
+        <button id="btnJa" type="button" aria-label="日本語" aria-pressed="false">JP</button>
       </div>
     </nav>
   </div>
@@ -493,24 +496,41 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 <main id="top">
   <!-- HERO -->
   <div class="hero">
-    <img class="hero-logo" src="logo.png" alt="MERO"
-         onerror="this.style.display='none';document.getElementById('logoText').style.display='inline-block'">
-    <span class="hero-logo-text" id="logoText">MERO</span>
-    <div>
-      <span class="hero-hello" data-i18n="hero_hello">안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦</span>
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> MERO / MV & MOTION</p>
+      <h1><span data-i18n="hero_line1">이야기가 담긴</span><br><span class="hero-accent" data-i18n="hero_line2">영상을 만들어요.</span><span class="hero-star" aria-hidden="true">✦</span></h1>
+      <p class="hero-hello" data-i18n="hero_hello">안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦</p>
+      <div class="hero-badges">
+        <span class="badge">MV EDIT</span><span class="badge">MOTION</span><span class="badge">AFTER EFFECTS</span>
+      </div>
+      <div class="hero-actions">
+        <a class="action-primary" href="#works"><span data-i18n="view_works">작업물 보기</span><span aria-hidden="true">↗</span></a>
+        <a class="action-secondary" href="#contact"><span data-i18n="inquire">제작 문의</span><span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-signature"><img class="hero-logo" src="logo.png" alt="MERO" width="2119" height="1289"><span>Music into motion.<br>Stories into frames.</span></div>
     </div>
-    <p class="hero-tagline" data-i18n="hero_tagline">이야기가 담긴 영상을 만들어요! 🍈</p>
-    <div class="hero-badges">
-      <span class="badge">MV EDIT</span>
-      <span class="badge">MOTION</span>
-      <span class="badge">AFTER EFFECTS</span>
+    <div class="featured-work" id="featuredWork">
+      <div class="featured-top"><span><i aria-hidden="true"></i> PICKED WORK</span><span aria-hidden="true">01 / MERO</span></div>
+      <button class="featured-thumb" id="featuredPlay" type="button">
+        <img id="featuredImage" alt="" width="1280" height="720" fetchpriority="high">
+        <span class="featured-play"><span aria-hidden="true">▶</span><span data-i18n="watch_film">영상 보기</span></span>
+      </button>
+      <div class="featured-caption"><p id="featuredTitle"></p><span aria-hidden="true">↗</span></div>
+      <div class="featured-sticker" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#melon-pan"/></svg><span>made by<br>MERO</span></div>
     </div>
   </div>
 
+  <div class="studio-strip" aria-hidden="true"><span>MV EDIT</span><b>✦</b><span>STORIES IN MOTION</span><b>✦</b><span>AFTER EFFECTS</span><b>✦</b><span>MERO STUDIO</span></div>
+
   <!-- WORKS -->
   <section id="works" class="reveal">
-    <div class="section-title">
-      <span class="star">✦</span><h2>WORKS</h2><span class="star">✦</span>
+    <div class="section-heading">
+      <div><p class="eyebrow">01 / SELECTED WORKS</p><div class="section-title"><h2>WORKS<span class="title-star" aria-hidden="true">✦</span></h2></div><p class="works-intro" data-i18n="works_intro">음악과 이야기를 담은 작업들.</p></div>
+      <span class="work-total" id="workTotal"></span>
+    </div>
+    <div class="works-toolbar">
+      <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><label class="sr-only" for="workSearch" data-i18n="search_label">작업물 검색</label><input id="workSearch" type="search" autocomplete="off" data-i18n-placeholder="search_placeholder" placeholder="곡명이나 아티스트로 검색"><button id="clearSearch" class="search-clear" type="button" hidden data-i18n-aria-label="search_clear">×</button></div>
+      <p class="search-count" id="searchCount" role="status" aria-live="polite" aria-atomic="true"></p>
     </div>
     <p class="section-sub admin-only" data-i18n="works_sub">유튜브 링크를 붙여넣으면 제목을 자동으로 가져와요!</p>
 
@@ -525,6 +545,8 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 
     <div class="grid" id="videoGrid"></div>
 
+    <div class="search-empty" id="searchEmpty" hidden><span aria-hidden="true">✳</span><h3 data-i18n="no_results">검색 결과가 없어요.</h3><p data-i18n="search_hint">다른 곡명이나 아티스트로 검색해 보세요.</p><button id="resetSearch" type="button" class="action-secondary" data-i18n="all_works">전체 작업물 보기</button></div>
+
     <div class="more-row" id="moreRow" hidden>
       <button class="btn-more" id="moreBtn" type="button"></button>
     </div>
@@ -537,8 +559,9 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 
   <!-- CONTACT -->
   <section id="contact" class="reveal">
-    <div class="section-title">
-      <span class="star">✦</span><h2>CONTACT</h2><span class="star">✦</span>
+    <div class="contact-heading">
+      <p class="eyebrow">02 / LET'S MAKE A STORY</p>
+      <h2><span data-i18n="contact_line1">다음 이야기는</span><br><span data-i18n="contact_line2">함께 만들어요.</span><span aria-hidden="true">✦</span></h2>
     </div>
     <p class="section-sub" data-i18n="contact_sub">MV 제작 의뢰·문의는 아래로 연락해 주세요! (클릭하면 복사돼요)</p>
     <div class="contact-cards">
@@ -553,6 +576,8 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
         <span class="contact-hint">⎘</span>
       </div>
     </div>
+    <a class="email-cta action-primary" href="mailto:m3ro3333@gmail.com"><span data-i18n="email_cta">이메일로 문의하기</span><span aria-hidden="true">↗</span></a>
+    <p class="contact-note" data-i18n="contact_note">곡 정보, 원하는 컨셉, 희망 일정을 함께 알려주시면 좋아요.</p>
   </section>
 </main>
 
@@ -562,37 +587,51 @@ footer .footer-mascot:hover{transform:rotate(360deg) scale(1.15)}
 </footer>
 
 <!-- PLAYER MODAL -->
-<div class="modal" id="playerModal" aria-hidden="true">
-  <div class="modal-box">
+<div class="modal" id="playerModal" aria-hidden="true" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
     <div class="modal-head">
       <span class="dot r"></span><span class="dot g"></span>
       <span class="modal-title" id="modalTitle"></span>
-      <button class="modal-close" id="modalClose" aria-label="close">✕</button>
+      <button class="modal-close" id="modalClose" type="button" data-i18n-aria-label="close_player">✕</button>
     </div>
     <div class="modal-video" id="modalVideo"></div>
+    <div class="modal-foot"><a id="modalYoutube" class="chip" target="_blank" rel="noopener" data-i18n="chip_watch">YouTube ↗</a><button id="shareWork" class="chip" type="button" data-i18n="share_work">작업물 링크 복사</button></div>
   </div>
 </div>
 
 <!-- FAQ CHAT -->
-<div class="chat-panel" id="chatPanel" aria-hidden="true">
+<div class="chat-panel" id="chatPanel" aria-hidden="true" hidden role="region" aria-labelledby="chatHeading">
   <div class="chat-head">
     <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
-    <b>MERO BOT</b>
+    <b id="chatHeading">MERO BOT</b>
     <span class="status" data-i18n="chat_status">온라인</span>
+    <button id="chatClose" class="chat-close" type="button" data-i18n-aria-label="close_faq">×</button>
   </div>
   <div class="chat-body" id="chatBody"></div>
 </div>
-<button class="chat-fab" id="chatFab" type="button" aria-label="FAQ chat">
+<button class="chat-fab" id="chatFab" type="button" data-i18n-aria-label="open_faq" aria-controls="chatPanel" aria-expanded="false">
   <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#melon-pan"/></svg>
   <span class="fab-badge"></span>
 </button>
 
-<div id="toast-zone"></div>
+<div id="toast-zone" role="status" aria-live="polite" aria-atomic="false"></div>
 
 <script>
 /* ============ i18n ============ */
 const I18N = {
   ko: {
+    skip_link:'작업물로 바로 가기', hero_line1:'이야기가 담긴', hero_line2:'영상을 만들어요.',
+    view_works:'작업물 보기', inquire:'제작 문의', watch_film:'영상 보기',
+    works_intro:'음악과 이야기를 담은 작업들.', works_unit:'개 작업물',
+    search_label:'작업물 검색', search_placeholder:'곡명이나 아티스트로 검색', search_clear:'검색어 지우기',
+    results_unit:'개 작업물', results_for:'검색 결과', no_results:'검색 결과가 없어요.',
+    search_hint:'다른 곡명이나 아티스트로 검색해 보세요.', all_works:'전체 작업물 보기',
+    contact_line1:'다음 이야기는', contact_line2:'함께 만들어요.',
+    email_cta:'이메일로 문의하기', contact_note:'곡 정보, 원하는 컨셉, 희망 일정을 함께 알려주시면 좋아요.',
+    close_player:'영상 닫기', share_work:'작업물 링크 복사', play_work:'영상 재생',
+    toast_work_link:'이 작업물의 링크를 복사했어요!', close_faq:'FAQ 닫기', open_faq:'자주 묻는 질문',
+    share_site:'사이트 링크 복사', toast_copy_failed:'복사하지 못했어요. 다시 시도해 주세요.',
+    chat_status:'FAQ 안내',
     nav_works:'작업물', nav_contact:'연락처',
     hero_hello:'안녕하세요! 서브컬쳐 MV 편집자 MERO입니다 ✦',
     hero_tagline:'이야기가 담긴 영상을 만들어요! 🍈',
@@ -616,12 +655,23 @@ const I18N = {
     confirm_delete:'이 영상을 삭제할까요?',
     chip_watch:'YouTube ↗', chip_delete:'삭제',
     untitled:'(제목 없음)',
-    chat_status:'온라인',
     chat_greet:'안녕하세요! MERO의 메론빵 봇이에요. 궁금한 걸 골라주세요 🍈',
     chat_more:'다른 질문도 있나요?',
     show_more:'더보기', show_less:'접기'
   },
   ja: {
+    skip_link:'作品にスキップ', hero_line1:'物語が詰まった', hero_line2:'映像を作ります。',
+    view_works:'作品を見る', inquire:'制作のご相談', watch_film:'動画を見る',
+    works_intro:'音楽と物語を映し出す作品たち。', works_unit:'作品',
+    search_label:'作品を検索', search_placeholder:'曲名やアーティストで検索', search_clear:'検索をクリア',
+    results_unit:'作品', results_for:'検索結果', no_results:'作品が見つかりませんでした。',
+    search_hint:'別の曲名やアーティストで検索してみてください。', all_works:'すべての作品を見る',
+    contact_line1:'次の物語を、', contact_line2:'一緒に作りましょう。',
+    email_cta:'メールで相談する', contact_note:'曲の情報・コンセプト・ご希望のスケジュールをお聞かせください。',
+    close_player:'動画を閉じる', share_work:'作品のリンクをコピー', play_work:'動画を再生',
+    toast_work_link:'この作品のリンクをコピーしました！', close_faq:'FAQを閉じる', open_faq:'よくある質問',
+    share_site:'サイトのリンクをコピー', toast_copy_failed:'コピーできませんでした。もう一度お試しください。',
+    chat_status:'FAQガイド',
     nav_works:'作品', nav_contact:'連絡先',
     hero_hello:'こんにちは！サブカルMVエディターのMEROです ✦',
     hero_tagline:'物語が詰まった映像を作ります！🍈',
@@ -645,13 +695,19 @@ const I18N = {
     confirm_delete:'この動画を削除しますか？',
     chip_watch:'YouTube ↗', chip_delete:'削除',
     untitled:'（タイトルなし）',
-    chat_status:'オンライン',
     chat_greet:'こんにちは！MEROのメロンパンボットです。気になる質問を選んでください🍈',
     chat_more:'他の質問はありますか？',
     show_more:'もっと見る', show_less:'閉じる'
   }
 };
-let lang = localStorage.getItem('mero_lang') || 'ja';
+function readSetting(store, key, fallback) {
+  try { return window[store].getItem(key) ?? fallback; } catch { return fallback; }
+}
+function writeSetting(store, key, value) {
+  try { window[store].setItem(key, value); return true; } catch { return false; }
+}
+let lang = readSetting('localStorage', 'mero_lang', 'ja');
+if (!['ko', 'ja'].includes(lang)) lang = 'ja';
 const t = key => (I18N[lang] && I18N[lang][key]) || I18N.ko[key] || key;
 
 function applyLang() {
@@ -659,14 +715,20 @@ function applyLang() {
   document.getElementById('langToggle').dataset.lang = lang;
   document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
   document.getElementById('btnJa').classList.toggle('active', lang === 'ja');
+  document.getElementById('btnKo').setAttribute('aria-pressed', String(lang === 'ko'));
+  document.getElementById('btnJa').setAttribute('aria-pressed', String(lang === 'ja'));
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAriaLabel)); });
+  document.getElementById('shareBtn').setAttribute('aria-label', t('share_site'));
+  document.getElementById('shareBtn').title = t('share_site');
+  renderFeatured();
   renderVideos(); // refresh chip labels
 }
 function setLang(next) {
   if (lang === next) return;
   lang = next;
-  localStorage.setItem('mero_lang', lang);
+  writeSetting('localStorage', 'mero_lang', lang);
   applyLang();
   resetChat(); // 챗봇도 새 언어로 다시 시작
 }
@@ -717,26 +779,30 @@ function loadVideos() {
       const base = localStorage.getItem('mero_videos_base');
       /* 저장해 둔 편집본은 공식 목록(SEED)이 그대로일 때만 이어서 보여줘요.
          새 영상이 SEED에 푸시돼서 base가 달라졌으면, 최신 공식 목록으로 새로 시작합니다. */
-      if (Array.isArray(saved) && saved.length && base === seedSig()) return saved;
+      if (Array.isArray(saved) && base === seedSig() && saved.every(v => isVideoId(v?.id) && typeof v.title === 'string')) return saved;
     } catch (e) {}
   }
   return SEED_VIDEOS.slice();
 }
 const saveVideos = () => {
-  localStorage.setItem('mero_videos', JSON.stringify(videos));
-  localStorage.setItem('mero_videos_base', seedSig());
+  writeSetting('localStorage', 'mero_videos', JSON.stringify(videos));
+  writeSetting('localStorage', 'mero_videos_base', seedSig());
 };
 
+const isVideoId = id => typeof id === 'string' && /^[A-Za-z0-9_-]{11}$/.test(id);
 function parseYouTubeId(url) {
   try {
     const u = new URL(url.trim());
+    if (!['https:', 'http:'].includes(u.protocol)) return null;
     const host = u.hostname.replace(/^www\.|^m\./, '');
-    if (host === 'youtu.be') return u.pathname.slice(1).split('/')[0] || null;
+    let id = null;
+    if (host === 'youtu.be') id = u.pathname.slice(1).split('/')[0];
     if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
-      if (u.pathname === '/watch') return u.searchParams.get('v');
-      const m = u.pathname.match(/^\/(shorts|embed|live|v)\/([\w-]{6,})/);
-      if (m) return m[2];
+      if (u.pathname === '/watch') id = u.searchParams.get('v');
+      const m = u.pathname.match(/^\/(shorts|embed|live|v)\/([A-Za-z0-9_-]{11})(?:\/|$)/);
+      if (m) id = m[2];
     }
+    return isVideoId(id) ? id : null;
   } catch (e) {}
   return null;
 }
@@ -749,7 +815,7 @@ async function fetchTitle(id) {
   ];
   for (const ep of endpoints) {
     try {
-      const r = await fetch(ep);
+      const r = await fetch(ep, { signal: AbortSignal.timeout(6000) });
       if (r.ok) {
         const d = await r.json();
         if (d && d.title) return d.title;
@@ -767,16 +833,58 @@ document.getElementById('videoGrid').addEventListener('dragover', e => {
 const INITIAL_COUNT = 6;
 const STEP = 6;
 let visibleCount = INITIAL_COUNT;
+let searchQuery = '';
+const normalizeSearch = value => value.normalize('NFKC').toLocaleLowerCase().trim();
+function filteredVideos() {
+  const query = normalizeSearch(searchQuery);
+  return query ? videos.filter(v => normalizeSearch(`${v.title} ${v.id}`).includes(query)) : videos;
+}
+
+function renderFeatured() {
+  const video = SEED_VIDEOS[0];
+  document.getElementById('featuredWork').hidden = !video;
+  if (!video) return;
+  document.getElementById('featuredTitle').textContent = video.title || t('untitled');
+  const image = document.getElementById('featuredImage');
+  if (image.dataset.id !== video.id) {
+    image.dataset.id = video.id;
+    image.src = `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`;
+    const hi = new Image();
+    hi.onload = () => { if (hi.naturalWidth > 120) image.src = hi.src; };
+    hi.src = `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`;
+  }
+  document.getElementById('featuredPlay').setAttribute('aria-label', `${t('play_work')}: ${video.title || t('untitled')}`);
+}
+document.getElementById('featuredPlay').addEventListener('click', () => {
+  if (SEED_VIDEOS[0]) openPlayer(SEED_VIDEOS[0]);
+});
+
+function clearSearch() {
+  searchQuery = '';
+  document.getElementById('workSearch').value = '';
+  visibleCount = INITIAL_COUNT;
+  renderVideos();
+  document.getElementById('workSearch').focus();
+}
+document.getElementById('workSearch').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  visibleCount = INITIAL_COUNT;
+  renderVideos();
+});
+document.getElementById('clearSearch').addEventListener('click', clearSearch);
+document.getElementById('resetSearch').addEventListener('click', clearSearch);
 
 function updateMoreBtn() {
   const row = document.getElementById('moreRow');
   const btn = document.getElementById('moreBtn');
-  if (editMode || videos.length <= INITIAL_COUNT) { row.hidden = true; return; }
+  const matches = filteredVideos();
+  if (editMode || matches.length <= INITIAL_COUNT) { row.hidden = true; return; }
   row.hidden = false;
-  const remaining = videos.length - visibleCount;
+  const remaining = matches.length - visibleCount;
   const collapsed = remaining <= 0;
   const next = Math.min(STEP, remaining);
   btn.textContent = collapsed ? t('show_less') : `${t('show_more')} (+${next})`;
+  btn.setAttribute('aria-label', btn.textContent);
   btn.classList.toggle('less', collapsed);
 }
 
@@ -791,6 +899,7 @@ function createCard(v) {
         <span class="play-bubble"><span>▶</span></span>
       </button>
       <div class="card-body">
+        <div class="card-meta"><span class="card-number"></span><span>MV / MOTION</span></div>
         <p class="card-title"></p>
         <div class="card-actions">
           <a class="chip" target="_blank" rel="noopener" draggable="false"
@@ -799,6 +908,8 @@ function createCard(v) {
         </div>
       </div>`;
     card.querySelector('.card-title').textContent = v.title || t('untitled');
+    card.querySelector('.card-number').textContent = `WORK ${String(videos.indexOf(v) + 1).padStart(2, '0')}`;
+    card.querySelector('.thumb').setAttribute('aria-label', `${t('play_work')}: ${v.title || t('untitled')}`);
 
     /* 썸네일: hqdefault를 기본으로 쓰고, 고화질(maxres)이 있으면 자동 업그레이드.
        maxres가 없는 영상(404)은 hqdefault 그대로 유지돼서 회색으로 안 떠요. */
@@ -814,7 +925,9 @@ function createCard(v) {
       clearTimeout(pvTimer);
       if (pv) { pv.remove(); pv = null; }
     };
+    card.cleanupPreview = stopPreview;
     thumbEl.addEventListener('mouseenter', () => {
+      if (editMode || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.matchMedia('(hover: hover)').matches) return;
       pvTimer = setTimeout(() => {
         pv = document.createElement('iframe');
         pv.className = 'preview';
@@ -830,7 +943,7 @@ function createCard(v) {
 
     /* drag reorder (편집 모드 전용) */
     card.dataset.id = v.id;
-    card.draggable = true;
+    card.draggable = editMode;
     card.addEventListener('dragstart', e => {
       if (!editMode) { e.preventDefault(); return; }
       stopPreview();
@@ -873,25 +986,36 @@ function revealCard(card, i) {
 
 function renderVideos() {
   const grid = document.getElementById('videoGrid');
+  [...grid.children].forEach(card => card.cleanupPreview?.());
   grid.innerHTML = '';
+  const matches = filteredVideos();
   document.getElementById('emptyState').hidden = videos.length > 0;
-  const count = editMode ? videos.length : Math.min(visibleCount, videos.length);
-  for (let i = 0; i < count; i++) revealCard(createCard(videos[i]), i);
+  document.getElementById('searchEmpty').hidden = !videos.length || matches.length > 0;
+  document.getElementById('clearSearch').hidden = !searchQuery;
+  const total = document.getElementById('workTotal');
+  total.replaceChildren();
+  const number = document.createElement('b');
+  number.textContent = videos.length;
+  total.append(number, ` ${t('works_unit')}`);
+  document.getElementById('searchCount').textContent = searchQuery ? `${t('results_for')} · ${matches.length} ${t('results_unit')}` : `${videos.length} ${t('results_unit')}`;
+  const count = editMode ? matches.length : Math.min(visibleCount, matches.length);
+  for (let i = 0; i < count; i++) revealCard(createCard(matches[i]), i);
   updateMoreBtn();
 }
 
 /* 더보기: 기존 카드는 그대로 두고 다음 6개만 이어 붙여서 부드럽게 등장 */
 function showMore() {
   const grid = document.getElementById('videoGrid');
+  const matches = filteredVideos();
   const start = grid.children.length;
-  const end = Math.min(start + STEP, videos.length);
-  for (let i = start; i < end; i++) revealCard(createCard(videos[i]), i - start);
+  const end = Math.min(start + STEP, matches.length);
+  for (let i = start; i < end; i++) revealCard(createCard(matches[i]), i - start);
   visibleCount = end;
   updateMoreBtn();
 }
 
 document.getElementById('moreBtn').addEventListener('click', () => {
-  if (visibleCount >= videos.length) {
+  if (visibleCount >= filteredVideos().length) {
     visibleCount = INITIAL_COUNT;
     renderVideos();
     document.getElementById('works').scrollIntoView({ behavior: 'smooth' });
@@ -918,53 +1042,103 @@ document.getElementById('addForm').addEventListener('submit', async e => {
   videos.unshift({ id, title: title || '' });
   saveVideos();
   input.value = '';
+  searchQuery = '';
+  document.getElementById('workSearch').value = '';
   renderVideos();
   toast(title ? t('toast_added') : t('toast_titlefail'), !title);
 });
 
 /* ============ player modal ============ */
 const modal = document.getElementById('playerModal');
+let playerTrigger = null, activeVideo = null;
+let playerCloseTimer = null;
 function openPlayer(v) {
+  if (!isVideoId(v.id)) return;
+  clearTimeout(playerCloseTimer);
+  playerTrigger = document.activeElement;
+  activeVideo = v;
+  modal.hidden = false;
   document.getElementById('modalTitle').textContent = v.title || t('untitled');
   document.getElementById('modalVideo').innerHTML =
     `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0"
-       title="player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+       title="YouTube video player" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  document.getElementById('modalYoutube').href = `https://www.youtube.com/watch?v=${v.id}`;
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  document.getElementById('modalClose').focus();
+  const url = new URL(window.location.href);
+  url.searchParams.set('work', v.id);
+  window.history.replaceState(null, '', url);
+  document.querySelector('main').inert = true;
+  document.querySelector('header').inert = true;
+  document.querySelector('footer').inert = true;
+  chatPanel.inert = true;
+  document.getElementById('chatFab').inert = true;
 }
 function closePlayer() {
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
-  setTimeout(() => { document.getElementById('modalVideo').innerHTML = ''; }, 280);
+  activeVideo = null;
+  document.getElementById('modalVideo').replaceChildren();
+  playerCloseTimer = setTimeout(() => { modal.hidden = true; }, 260);
+  const url = new URL(window.location.href);
+  url.searchParams.delete('work');
+  window.history.replaceState(null, '', url);
+  document.querySelector('main').inert = false;
+  document.querySelector('header').inert = false;
+  document.querySelector('footer').inert = false;
+  chatPanel.inert = false;
+  document.getElementById('chatFab').inert = false;
+  if (playerTrigger?.isConnected) playerTrigger.focus();
 }
 document.getElementById('modalClose').addEventListener('click', closePlayer);
 modal.addEventListener('click', e => { if (e.target === modal) closePlayer(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closePlayer(); });
+document.addEventListener('keydown', e => {
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'Escape') { e.preventDefault(); closePlayer(); }
+  if (e.key === 'Tab') {
+    const controls = [...modal.querySelectorAll('button,a[href],iframe')];
+    const first = controls[0], last = controls[controls.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
 
 /* ============ clipboard helper ============ */
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); }
   catch (e) {
+    const focused = document.activeElement;
     const ta = document.createElement('textarea');
     ta.value = text; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy'); ta.remove();
+    ta.select(); const copied = document.execCommand('copy'); ta.remove();
+    if (focused?.isConnected) focused.focus();
+    if (!copied) throw new Error('Clipboard unavailable');
   }
+}
+
+async function copyWithFeedback(value, message) {
+  try { await copyText(value); toast(message); } catch { toast(t('toast_copy_failed'), true); }
 }
 
 /* ============ share button ============ */
 const SITE_URL = 'https://m3ro33.github.io/mero-mv/';
 document.getElementById('shareBtn').addEventListener('click', async () => {
-  await copyText(SITE_URL);
-  toast(t('toast_link'));
+  await copyWithFeedback(SITE_URL, t('toast_link'));
+});
+document.getElementById('shareWork').addEventListener('click', async () => {
+  if (!activeVideo) return;
+  const url = new URL(SITE_URL);
+  url.searchParams.set('work', activeVideo.id);
+  await copyWithFeedback(url.href, t('toast_work_link'));
 });
 
 /* ============ contact copy ============ */
 document.querySelectorAll('.contact-card').forEach(card => {
   const copy = async () => {
-    await copyText(card.dataset.copy);
-    toast(t('toast_copied'));
+    await copyWithFeedback(card.dataset.copy, t('toast_copied'));
   };
   card.addEventListener('click', copy);
   card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copy(); } });
@@ -1011,7 +1185,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* ============ hidden edit mode ============ */
 /* 푸터의 멜론빵을 1.2초 안에 5번 연속 클릭하면 편집 모드가 켜지고 꺼져요 */
-let editMode = sessionStorage.getItem('mero_admin') === '1';
+let editMode = readSetting('sessionStorage', 'mero_admin', '0') === '1';
 const applyAdmin = () => document.body.classList.toggle('admin', editMode);
 let tapCount = 0, tapTimer = null;
 document.getElementById('footerMascot').addEventListener('click', () => {
@@ -1021,8 +1195,11 @@ document.getElementById('footerMascot').addEventListener('click', () => {
   if (tapCount >= 5) {
     tapCount = 0;
     editMode = !editMode;
-    sessionStorage.setItem('mero_admin', editMode ? '1' : '0');
+    writeSetting('sessionStorage', 'mero_admin', editMode ? '1' : '0');
     applyAdmin();
+    visibleCount = INITIAL_COUNT;
+    searchQuery = '';
+    document.getElementById('workSearch').value = '';
     videos = loadVideos();
     renderVideos();
     toast(editMode ? t('toast_admin_on') : t('toast_admin_off'));
@@ -1031,8 +1208,7 @@ document.getElementById('footerMascot').addEventListener('click', () => {
 
 /* 편집 모드 전용: 영상 목록을 JSON으로 복사 (배포 시 SEED_VIDEOS에 붙여넣기) */
 document.getElementById('exportBtn').addEventListener('click', async () => {
-  await copyText(JSON.stringify(videos, null, 2));
-  toast(t('toast_exported'));
+  await copyWithFeedback(JSON.stringify(videos, null, 2), t('toast_exported'));
 });
 
 /* ============ FAQ chat bot ============ */
@@ -1063,6 +1239,11 @@ const FAQ = [
 const chatPanel = document.getElementById('chatPanel');
 const chatBody = document.getElementById('chatBody');
 let chatStarted = false, chatBusy = false;
+let chatTimers = [];
+function chatLater(callback, delay) {
+  const timer = setTimeout(callback, delay);
+  chatTimers.push(timer);
+}
 
 function chatMsg(cls, text) {
   const d = document.createElement('div');
@@ -1093,11 +1274,11 @@ function askFaq(item, chipsEl) {
   const tp = document.createElement('div');
   tp.className = 'msg bot typing';
   tp.innerHTML = '<i></i><i></i><i></i>';
-  setTimeout(() => { chatBody.appendChild(tp); chatBody.scrollTop = chatBody.scrollHeight; }, 350);
-  setTimeout(() => {
+  chatLater(() => { chatBody.appendChild(tp); chatBody.scrollTop = chatBody.scrollHeight; }, 350);
+  chatLater(() => {
     tp.remove();
     chatMsg('bot', item.a[lang] || item.a.ko);
-    setTimeout(() => {
+    chatLater(() => {
       chatMsg('bot', t('chat_more'));
       chatChips();
       chatBusy = false;
@@ -1111,15 +1292,25 @@ function startChat() {
   chatChips();
 }
 function resetChat() {
+  chatTimers.forEach(clearTimeout);
+  chatTimers = [];
   chatBody.innerHTML = '';
   chatStarted = false;
   chatBusy = false;
   if (chatPanel.classList.contains('open')) startChat();
 }
-document.getElementById('chatFab').addEventListener('click', () => {
-  const open = chatPanel.classList.toggle('open');
+function setChatOpen(open) {
+  chatPanel.hidden = !open;
+  chatPanel.classList.toggle('open', open);
   chatPanel.setAttribute('aria-hidden', String(!open));
+  document.getElementById('chatFab').setAttribute('aria-expanded', String(open));
   if (open) startChat();
+  else document.getElementById('chatFab').focus();
+}
+document.getElementById('chatFab').addEventListener('click', () => setChatOpen(!chatPanel.classList.contains('open')));
+document.getElementById('chatClose').addEventListener('click', () => setChatOpen(false));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && chatPanel.classList.contains('open') && !modal.classList.contains('open')) setChatOpen(false);
 });
 
 /* ============ secret code: MERO0420 → melon rain ============ */
@@ -1151,6 +1342,9 @@ function melonRain() {
 applyAdmin();
 videos = loadVideos();
 applyLang();
+const linkedWork = new URL(window.location.href).searchParams.get('work');
+const linkedVideo = SEED_VIDEOS.find(v => v.id === linkedWork);
+if (linkedVideo) openPlayer(linkedVideo);
 </script>
 </body>
 </html>
